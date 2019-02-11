@@ -15,7 +15,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L Lab1-rescue:R-Device R1
+L Lab1-rescue:R-Device-Lab1-rescue R1
 U 1 1 5C49EC6C
 P 4250 3300
 F 0 "R1" V 4043 3300 50  0000 C CNN
@@ -28,7 +28,7 @@ $EndComp
 Wire Wire Line
 	4400 3300 4450 3300
 $Comp
-L Lab1-rescue:R-Device R2
+L Lab1-rescue:R-Device-Lab1-rescue R2
 U 1 1 5C4A0A9B
 P 4300 3500
 F 0 "R2" V 4093 3500 50  0000 C CNN
@@ -39,7 +39,7 @@ F 3 "~" H 4300 3500 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L Lab1-rescue:GND-power #PWR09
+L Lab1-rescue:GND-power-Lab1-rescue #PWR09
 U 1 1 5C4A10A9
 P 4150 3500
 F 0 "#PWR09" H 4150 3250 50  0001 C CNN
@@ -50,7 +50,7 @@ F 3 "" H 4150 3500 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Lab1-rescue:Crystal-Device Y1
+L Lab1-rescue:Crystal-Device-Lab1-rescue Y1
 U 1 1 5C4A1143
 P 4100 4450
 F 0 "Y1" V 4146 4319 50  0000 R CNN
@@ -148,7 +148,7 @@ Connection ~ 4100 4650
 Wire Wire Line
 	4100 4650 4400 4650
 $Comp
-L Lab1-rescue:C-Device C6
+L Lab1-rescue:C-Device-Lab1-rescue C6
 U 1 1 5C4E9825
 P 3800 4250
 F 0 "C6" V 4052 4250 50  0000 C CNN
@@ -159,7 +159,7 @@ F 3 "~" H 3800 4250 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L Lab1-rescue:C-Device C7
+L Lab1-rescue:C-Device-Lab1-rescue C7
 U 1 1 5C4EB0EB
 P 3800 4650
 F 0 "C7" V 4052 4650 50  0000 C CNN
@@ -178,7 +178,7 @@ Wire Wire Line
 Wire Wire Line
 	1150 3450 1300 3450
 $Comp
-L Lab1-rescue:C-Device C1
+L Lab1-rescue:C-Device-Lab1-rescue C1
 U 1 1 5C4EBC89
 P 600 3300
 F 0 "C1" H 715 3346 50  0000 L CNN
@@ -189,7 +189,7 @@ F 3 "~" H 600 3300 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Lab1-rescue:C-Device C2
+L Lab1-rescue:C-Device-Lab1-rescue C2
 U 1 1 5C4EE7BA
 P 950 3300
 F 0 "C2" H 1065 3346 50  0000 L CNN
@@ -206,7 +206,7 @@ Connection ~ 950  3450
 Wire Wire Line
 	950  3450 1150 3450
 $Comp
-L Lab1-rescue:C-Device C3
+L Lab1-rescue:C-Device-Lab1-rescue C3
 U 1 1 5C4EE8AA
 P 1300 3300
 F 0 "C3" H 1415 3346 50  0000 L CNN
@@ -223,7 +223,7 @@ Connection ~ 1300 3450
 Wire Wire Line
 	1300 3450 1650 3450
 $Comp
-L Lab1-rescue:C-Device C4
+L Lab1-rescue:C-Device-Lab1-rescue C4
 U 1 1 5C4EE8E2
 P 1650 3300
 F 0 "C4" H 1765 3346 50  0000 L CNN
@@ -250,7 +250,7 @@ Wire Wire Line
 Wire Wire Line
 	850  7150 1550 7150
 $Comp
-L Lab1-rescue:C-Device C14
+L Lab1-rescue:C-Device-Lab1-rescue C14
 U 1 1 5C4FD611
 P 1550 7000
 F 0 "C14" H 1665 7046 50  0000 L CNN
@@ -271,7 +271,7 @@ Connection ~ 1300 6750
 Wire Wire Line
 	1300 6750 1300 6700
 $Comp
-L Lab1-rescue:C-Device C10
+L Lab1-rescue:C-Device-Lab1-rescue C10
 U 1 1 5C4FF7D0
 P 4250 3900
 F 0 "C10" H 4365 3946 50  0000 L CNN
@@ -286,7 +286,7 @@ Wire Wire Line
 Wire Wire Line
 	4250 3700 4450 3700
 $Comp
-L Lab1-rescue:USB_OTG-Connector J1
+L Lab1-rescue:USB_OTG-Connector-Lab1-rescue J1
 U 1 1 5C505D13
 P 800 1400
 F 0 "J1" H 855 1867 50  0000 C CNN
@@ -299,7 +299,7 @@ $EndComp
 Wire Wire Line
 	1100 1200 1250 1200
 $Comp
-L Lab1-rescue:C-Device C8
+L Lab1-rescue:C-Device-Lab1-rescue C8
 U 1 1 5C5084C1
 P 1700 1350
 F 0 "C8" H 1815 1396 50  0000 L CNN
@@ -310,7 +310,7 @@ F 3 "~" H 1700 1350 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Lab1-rescue:C-Device C9
+L Lab1-rescue:C-Device-Lab1-rescue C9
 U 1 1 5C5084FF
 P 2000 1350
 F 0 "C9" H 2115 1396 50  0000 L CNN
@@ -327,7 +327,7 @@ Wire Wire Line
 Wire Wire Line
 	1700 1200 2000 1200
 $Comp
-L Lab1-rescue:R-Device R3
+L Lab1-rescue:R-Device-Lab1-rescue R3
 U 1 1 5C50CC3B
 P 3750 1100
 F 0 "R3" H 3820 1146 50  0000 L CNN
@@ -338,7 +338,7 @@ F 3 "~" H 3750 1100 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L Lab1-rescue:R-Device R4
+L Lab1-rescue:R-Device-Lab1-rescue R4
 U 1 1 5C50CCAD
 P 3950 1700
 F 0 "R4" H 4020 1746 50  0000 L CNN
@@ -374,7 +374,7 @@ Connection ~ 1700 1500
 Wire Wire Line
 	1700 1500 2000 1500
 $Comp
-L Lab1-rescue:C-Device C12
+L Lab1-rescue:C-Device-Lab1-rescue C12
 U 1 1 5C5267A0
 P 4550 1250
 F 0 "C12" H 4665 1296 50  0000 L CNN
@@ -385,7 +385,7 @@ F 3 "~" H 4550 1250 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Lab1-rescue:C-Device C13
+L Lab1-rescue:C-Device-Lab1-rescue C13
 U 1 1 5C5267A6
 P 4850 1250
 F 0 "C13" H 4965 1296 50  0000 L CNN
@@ -421,7 +421,7 @@ Connection ~ 4400 3300
 Text Label 4350 2850 0    50   ~ 0
 NRST
 $Comp
-L Library_Lab1:LM1117ADJ U1
+L Lab1-rescue:LM1117ADJ-Library_Lab1 U1
 U 1 1 5C4ABE49
 P 2700 1200
 F 0 "U1" H 2700 1565 50  0000 C CNN
@@ -434,7 +434,7 @@ $EndComp
 Wire Wire Line
 	1250 1200 1350 1200
 $Comp
-L Lab1-rescue:CP-device C5
+L Lab1-rescue:CP-device-Lab1-rescue C5
 U 1 1 5C4AD75C
 P 1350 1350
 F 0 "C5" H 1468 1396 50  0000 L CNN
@@ -448,7 +448,7 @@ Connection ~ 1350 1200
 Wire Wire Line
 	1350 1200 1700 1200
 $Comp
-L Lab1-rescue:CP-device C11
+L Lab1-rescue:CP-device-Lab1-rescue C11
 U 1 1 5C4AD8D0
 P 4200 1250
 F 0 "C11" H 4318 1296 50  0000 L CNN
@@ -461,18 +461,18 @@ $EndComp
 Wire Wire Line
 	4200 1100 4550 1100
 $Comp
-L Lab1-rescue:C-device C15
+L Lab1-rescue:C-device-Lab1-rescue C15
 U 1 1 5C4AEFF0
 P 6050 2750
 F 0 "C15" H 6165 2796 50  0000 L CNN
 F 1 "1u" H 6165 2705 50  0000 L CNN
-F 2 "Capacitor_SMD:C_Elec_6.3x7.7" H 6088 2600 50  0001 C CNN
+F 2 "Capacitor_SMD:CP_Elec_4x5.4" H 6088 2600 50  0001 C CNN
 F 3 "~" H 6050 2750 50  0001 C CNN
 	1    6050 2750
 	1    0    0    -1  
 $EndComp
 $Comp
-L Lab1-rescue:C-device C16
+L Lab1-rescue:C-device-Lab1-rescue C16
 U 1 1 5C4AF1B2
 P 6450 2750
 F 0 "C16" H 6565 2796 50  0000 L CNN
@@ -483,7 +483,7 @@ F 3 "~" H 6450 2750 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Lab1-rescue:+3.3V-power #PWR020
+L Lab1-rescue:+3.3V-power-Lab1-rescue #PWR020
 U 1 1 5C4AF25C
 P 6850 2450
 F 0 "#PWR020" H 6850 2300 50  0001 C CNN
@@ -506,7 +506,7 @@ Wire Wire Line
 Wire Wire Line
 	6050 3000 6050 2900
 $Comp
-L Lab1-rescue:C-Device C17
+L Lab1-rescue:C-Device-Lab1-rescue C17
 U 1 1 5C4B9C80
 P 2000 3300
 F 0 "C17" H 2115 3346 50  0000 L CNN
@@ -545,7 +545,7 @@ Wire Wire Line
 Wire Wire Line
 	3400 1300 3400 1100
 $Comp
-L Lab1-rescue:+3.3V-power #PWR0101
+L Lab1-rescue:+3.3V-power-Lab1-rescue #PWR0101
 U 1 1 5C4C0761
 P 1300 6700
 F 0 "#PWR0101" H 1300 6550 50  0001 C CNN
@@ -556,7 +556,7 @@ F 3 "" H 1300 6700 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Lab1-rescue:+3.3V-power #PWR0102
+L Lab1-rescue:+3.3V-power-Lab1-rescue #PWR0102
 U 1 1 5C4C07A0
 P 5000 1000
 F 0 "#PWR0102" H 5000 850 50  0001 C CNN
@@ -567,7 +567,7 @@ F 3 "" H 5000 1000 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Lab1-rescue:+3.3V-power #PWR0103
+L Lab1-rescue:+3.3V-power-Lab1-rescue #PWR0103
 U 1 1 5C4C082E
 P 5150 2750
 F 0 "#PWR0103" H 5150 2600 50  0001 C CNN
@@ -578,7 +578,7 @@ F 3 "" H 5150 2750 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Lab1-rescue:+3.3V-power #PWR0104
+L Lab1-rescue:+3.3V-power-Lab1-rescue #PWR0104
 U 1 1 5C4C0A28
 P 1150 3050
 F 0 "#PWR0104" H 1150 2900 50  0001 C CNN
@@ -589,7 +589,7 @@ F 3 "" H 1150 3050 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Lab1-rescue:+3.3V-power #PWR0106
+L Lab1-rescue:+3.3V-power-Lab1-rescue #PWR0106
 U 1 1 5C4C0FE6
 P 4000 3300
 F 0 "#PWR0106" H 4000 3150 50  0001 C CNN
@@ -619,7 +619,7 @@ Wire Wire Line
 Wire Wire Line
 	2700 1550 3950 1550
 $Comp
-L Library_Lab1:CS4270 U3
+L Lab1-rescue:CS4270-Library_Lab1 U3
 U 1 1 5C614687
 P 9650 1900
 F 0 "U3" H 9650 -986 50  0000 C CNN
@@ -630,38 +630,34 @@ F 3 "" H 9650 2000 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Lab1-rescue:C-device C29
+L Lab1-rescue:C-device-Lab1-rescue C29
 U 1 1 5C618138
 P 9550 1450
 F 0 "C29" H 9665 1496 50  0000 L CNN
 F 1 "0.1u" H 9665 1405 50  0000 L CNN
-F 2 "Capacitor_SMD:C_Elec_6.3x7.7" H 9588 1300 50  0001 C CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 9588 1300 50  0001 C CNN
 F 3 "~" H 9550 1450 50  0001 C CNN
 	1    9550 1450
 	-1   0    0    1   
 $EndComp
 $Comp
-L Lab1-rescue:C-device C28
+L Lab1-rescue:C-device-Lab1-rescue C28
 U 1 1 5C623837
 P 9550 900
 F 0 "C28" H 9665 946 50  0000 L CNN
 F 1 "0.1u" H 9665 855 50  0000 L CNN
-F 2 "Capacitor_SMD:C_Elec_6.3x7.7" H 9588 750 50  0001 C CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 9588 750 50  0001 C CNN
 F 3 "~" H 9550 900 50  0001 C CNN
 	1    9550 900 
 	-1   0    0    1   
 $EndComp
-Wire Wire Line
-	9550 1300 9550 1100
-Wire Wire Line
-	10100 1300 10100 1100
 Wire Wire Line
 	9950 1600 9950 1900
 Connection ~ 9950 1600
 Wire Wire Line
 	9950 1600 9550 1600
 $Comp
-L Lab1-rescue:+5V-power #PWR025
+L Lab1-rescue:+5V-power-Lab1-rescue #PWR025
 U 1 1 5C65F829
 P 10400 700
 F 0 "#PWR025" H 10400 550 50  0001 C CNN
@@ -678,7 +674,7 @@ Wire Wire Line
 Wire Wire Line
 	6850 2600 6850 2450
 $Comp
-L Lab1-rescue:C-device C23
+L Lab1-rescue:C-device-Lab1-rescue C23
 U 1 1 5C66D78F
 P 8400 2600
 F 0 "C23" H 8515 2646 50  0000 L CNN
@@ -689,7 +685,7 @@ F 3 "~" H 8400 2600 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L Lab1-rescue:C-device C25
+L Lab1-rescue:C-device-Lab1-rescue C25
 U 1 1 5C66D796
 P 8700 2600
 F 0 "C25" H 8815 2646 50  0000 L CNN
@@ -700,7 +696,7 @@ F 3 "~" H 8700 2600 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Lab1-rescue:C-device C22
+L Lab1-rescue:C-device-Lab1-rescue C22
 U 1 1 5C66D79D
 P 8400 2100
 F 0 "C22" H 8515 2146 50  0000 L CNN
@@ -711,7 +707,7 @@ F 3 "~" H 8400 2100 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L Lab1-rescue:C-device C24
+L Lab1-rescue:C-device-Lab1-rescue C24
 U 1 1 5C66D7A4
 P 8700 2100
 F 0 "C24" H 8815 2146 50  0000 L CNN
@@ -721,29 +717,17 @@ F 3 "~" H 8700 2100 50  0001 C CNN
 	1    8700 2100
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	9550 1100 10100 1100
-Connection ~ 9550 1100
-Wire Wire Line
-	9550 1100 9550 1050
-Connection ~ 10100 1100
-Wire Wire Line
-	10100 1100 10100 1050
 $Comp
 L power:GNDA #PWR024
 U 1 1 5C6774FA
-P 10300 1150
-F 0 "#PWR024" H 10300 900 50  0001 C CNN
-F 1 "GNDA" H 10305 977 50  0000 C CNN
-F 2 "" H 10300 1150 50  0001 C CNN
-F 3 "" H 10300 1150 50  0001 C CNN
-	1    10300 1150
+P 9800 1150
+F 0 "#PWR024" H 9800 900 50  0001 C CNN
+F 1 "GNDA" H 9805 977 50  0000 C CNN
+F 2 "" H 9800 1150 50  0001 C CNN
+F 3 "" H 9800 1150 50  0001 C CNN
+	1    9800 1150
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	10300 1150 10300 1100
-Wire Wire Line
-	10300 1100 10100 1100
 Wire Wire Line
 	8950 2150 8950 1950
 Wire Wire Line
@@ -944,7 +928,7 @@ U 1 1 5C71F16E
 P 7100 5350
 F 0 "C20" V 6845 5350 50  0000 C CNN
 F 1 "3.3u" V 6936 5350 50  0000 C CNN
-F 2 "Capacitor_SMD:CP_Elec_5x5.9" H 7138 5200 50  0001 C CNN
+F 2 "Capacitor_SMD:CP_Elec_4x5.4" H 7138 5200 50  0001 C CNN
 F 3 "~" H 7100 5350 50  0001 C CNN
 	1    7100 5350
 	0    -1   1    0   
@@ -1017,7 +1001,7 @@ U 1 1 5C72B9BF
 P 7100 6000
 F 0 "C21" V 6845 6000 50  0000 C CNN
 F 1 "3.3u" V 6936 6000 50  0000 C CNN
-F 2 "Capacitor_SMD:CP_Elec_5x5.9" H 7138 5850 50  0001 C CNN
+F 2 "Capacitor_SMD:CP_Elec_4x5.4" H 7138 5850 50  0001 C CNN
 F 3 "~" H 7100 6000 50  0001 C CNN
 	1    7100 6000
 	0    -1   1    0   
@@ -1162,7 +1146,7 @@ F 3 "" H 6450 3000 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Lab1-rescue:+5V-power #PWR03
+L Lab1-rescue:+5V-power-Lab1-rescue #PWR03
 U 1 1 5C58706F
 P 1350 950
 F 0 "#PWR03" H 1350 800 50  0001 C CNN
@@ -1355,7 +1339,7 @@ F 3 "" H 8800 4600 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Lab1-rescue:+3.3V-power #PWR029
+L Lab1-rescue:+3.3V-power-Lab1-rescue #PWR029
 U 1 1 5C6B3406
 P 8300 4300
 F 0 "#PWR029" H 8300 4150 50  0001 C CNN
@@ -1369,7 +1353,7 @@ Wire Wire Line
 	8300 4300 8700 4300
 Connection ~ 8700 4300
 $Comp
-L Lab1-rescue:R-Device R13
+L Lab1-rescue:R-Device-Lab1-rescue R13
 U 1 1 5C6BEFCF
 P 1550 5850
 F 0 "R13" H 1620 5896 50  0000 L CNN
@@ -1380,7 +1364,7 @@ F 3 "~" H 1550 5850 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L Lab1-rescue:R-Device R14
+L Lab1-rescue:R-Device-Lab1-rescue R14
 U 1 1 5C6BF0BD
 P 1550 6050
 F 0 "R14" H 1620 6096 50  0000 L CNN
@@ -1410,7 +1394,7 @@ F 3 "" H 750 1950 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Lab1-rescue:+3.3V-power #PWR026
+L Lab1-rescue:+3.3V-power-Lab1-rescue #PWR026
 U 1 1 5C6EF460
 P 7900 2850
 F 0 "#PWR026" H 7900 2700 50  0001 C CNN
@@ -1441,7 +1425,7 @@ Connection ~ 8700 3700
 Wire Wire Line
 	8700 3700 8950 3700
 $Comp
-L Lab1-rescue:+3.3V-power #PWR034
+L Lab1-rescue:+3.3V-power-Lab1-rescue #PWR034
 U 1 1 5C71654A
 P 10650 1550
 F 0 "#PWR034" H 10650 1400 50  0001 C CNN
@@ -1524,7 +1508,7 @@ F 3 "~" H 1650 4600 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L Lab1-rescue:R-Device R18
+L Lab1-rescue:R-Device-Lab1-rescue R18
 U 1 1 5C629D8A
 P 650 4200
 F 0 "R18" H 720 4246 50  0000 L CNN
@@ -1535,7 +1519,7 @@ F 3 "~" H 650 4200 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Lab1-rescue:R-Device R19
+L Lab1-rescue:R-Device-Lab1-rescue R19
 U 1 1 5C629E7C
 P 1000 4200
 F 0 "R19" H 1070 4246 50  0000 L CNN
@@ -1546,7 +1530,7 @@ F 3 "~" H 1000 4200 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Lab1-rescue:R-Device R20
+L Lab1-rescue:R-Device-Lab1-rescue R20
 U 1 1 5C629F28
 P 1350 4200
 F 0 "R20" H 1420 4246 50  0000 L CNN
@@ -1557,7 +1541,7 @@ F 3 "~" H 1350 4200 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Lab1-rescue:R-Device R21
+L Lab1-rescue:R-Device-Lab1-rescue R21
 U 1 1 5C629FE4
 P 1650 4200
 F 0 "R21" H 1720 4246 50  0000 L CNN
@@ -1803,7 +1787,7 @@ Wire Wire Line
 Wire Wire Line
 	1250 6050 1400 6050
 $Comp
-L Lab1-rescue:+5V-power #PWR044
+L Lab1-rescue:+5V-power-Lab1-rescue #PWR044
 U 1 1 5C685224
 P 1350 5600
 F 0 "#PWR044" H 1350 5450 50  0001 C CNN
@@ -1832,7 +1816,7 @@ U 1 1 5C6C6325
 P 10100 900
 F 0 "C37" V 9845 900 50  0000 C CNN
 F 1 "1u" V 9936 900 50  0000 C CNN
-F 2 "Capacitor_SMD:CP_Elec_5x5.9" H 10138 750 50  0001 C CNN
+F 2 "Capacitor_SMD:CP_Elec_4x5.4" H 10138 750 50  0001 C CNN
 F 3 "~" H 10100 900 50  0001 C CNN
 	1    10100 900 
 	-1   0    0    -1  
@@ -1846,7 +1830,7 @@ U 1 1 5C6C69D9
 P 10100 1450
 F 0 "C38" V 9845 1450 50  0000 C CNN
 F 1 "1u" V 9936 1450 50  0000 C CNN
-F 2 "Capacitor_SMD:CP_Elec_5x5.9" H 10138 1300 50  0001 C CNN
+F 2 "Capacitor_SMD:CP_Elec_4x5.4" H 10138 1300 50  0001 C CNN
 F 3 "~" H 10100 1450 50  0001 C CNN
 	1    10100 1450
 	1    0    0    1   
@@ -1989,7 +1973,7 @@ F 3 "~" H 8650 5800 50  0001 C CNN
 	1    0    0    1   
 $EndComp
 $Comp
-L Library_Lab1:EADOGS102W-6 U4
+L Lab1-rescue:EADOGS102W-6-Library_Lab1 U4
 U 1 1 5C71F380
 P 3050 6500
 F 0 "U4" H 3050 6575 50  0000 C CNN
@@ -2005,7 +1989,7 @@ U 1 1 5C71F766
 P 2400 7050
 F 0 "C41" V 2145 7050 50  0000 C CNN
 F 1 "1u" V 2236 7050 50  0000 C CNN
-F 2 "Capacitor_SMD:CP_Elec_5x5.9" H 2438 6900 50  0001 C CNN
+F 2 "Capacitor_SMD:CP_Elec_4x5.4" H 2438 6900 50  0001 C CNN
 F 3 "~" H 2400 7050 50  0001 C CNN
 	1    2400 7050
 	0    1    -1   0   
@@ -2016,7 +2000,7 @@ U 1 1 5C720E00
 P 1950 7450
 F 0 "C39" V 1695 7450 50  0000 C CNN
 F 1 "1u" V 1786 7450 50  0000 C CNN
-F 2 "Capacitor_SMD:CP_Elec_5x5.9" H 1988 7300 50  0001 C CNN
+F 2 "Capacitor_SMD:CP_Elec_4x5.4" H 1988 7300 50  0001 C CNN
 F 3 "~" H 1950 7450 50  0001 C CNN
 	1    1950 7450
 	-1   0    0    -1  
@@ -2027,7 +2011,7 @@ U 1 1 5C737EC4
 P 2350 7450
 F 0 "C40" V 2095 7450 50  0000 C CNN
 F 1 "1u" V 2186 7450 50  0000 C CNN
-F 2 "Capacitor_SMD:CP_Elec_5x5.9" H 2388 7300 50  0001 C CNN
+F 2 "Capacitor_SMD:CP_Elec_4x5.4" H 2388 7300 50  0001 C CNN
 F 3 "~" H 2350 7450 50  0001 C CNN
 	1    2350 7450
 	-1   0    0    -1  
@@ -2073,7 +2057,7 @@ Connection ~ 3600 6650
 Wire Wire Line
 	3600 6650 3700 6650
 $Comp
-L Lab1-rescue:+3.3V-power #PWR049
+L Lab1-rescue:+3.3V-power-Lab1-rescue #PWR049
 U 1 1 5C7E2D7B
 P 4450 6850
 F 0 "#PWR049" H 4450 6700 50  0001 C CNN
@@ -2288,7 +2272,7 @@ Connection ~ 3850 7150
 Wire Wire Line
 	3850 7150 3850 7050
 $Comp
-L Lab1-rescue:+3.3V-power #PWR047
+L Lab1-rescue:+3.3V-power-Lab1-rescue #PWR047
 U 1 1 5C7B6B36
 P 2600 3450
 F 0 "#PWR047" H 2600 3300 50  0001 C CNN
@@ -2402,7 +2386,7 @@ Text Label 6150 5400 0    50   ~ 0
 Button5
 Connection ~ 2600 4100
 $Comp
-L Lab1-rescue:+3.3V-power #PWR036
+L Lab1-rescue:+3.3V-power-Lab1-rescue #PWR036
 U 1 1 5CB71F79
 P 5350 700
 F 0 "#PWR036" H 5350 550 50  0001 C CNN
@@ -2501,7 +2485,7 @@ Wire Wire Line
 	5750 1350 5850 1350
 Connection ~ 5350 1350
 $Comp
-L Lab1-rescue:+3.3V-power #PWR039
+L Lab1-rescue:+3.3V-power-Lab1-rescue #PWR039
 U 1 1 5CBD4C4B
 P 6400 700
 F 0 "#PWR039" H 6400 550 50  0001 C CNN
@@ -2600,7 +2584,7 @@ Wire Wire Line
 	6800 1350 6900 1350
 Connection ~ 6400 1350
 $Comp
-L Lab1-rescue:+3.3V-power #PWR052
+L Lab1-rescue:+3.3V-power-Lab1-rescue #PWR052
 U 1 1 5CBF5AFC
 P 7450 700
 F 0 "#PWR052" H 7450 550 50  0001 C CNN
@@ -2699,7 +2683,7 @@ Wire Wire Line
 	7850 1350 7950 1350
 Connection ~ 7450 1350
 $Comp
-L Lab1-rescue:+3.3V-power #PWR010
+L Lab1-rescue:+3.3V-power-Lab1-rescue #PWR010
 U 1 1 5CC180A6
 P 2400 1800
 F 0 "#PWR010" H 2400 1650 50  0001 C CNN
@@ -2847,7 +2831,7 @@ Connection ~ 8900 3850
 Wire Wire Line
 	8900 3850 8900 3600
 $Comp
-L Lab1-rescue:STM32F411RETx-MCU_ST_STM32F4 U2
+L Lab1-rescue:STM32F411RETx-MCU_ST_STM32F4-Lab1-rescue U2
 U 1 1 5C497D92
 P 5150 4800
 F 0 "U2" H 5650 3050 50  0000 C CNN
@@ -2869,4 +2853,29 @@ NoConn ~ 4450 6400
 NoConn ~ 4450 6200
 NoConn ~ 5850 3600
 NoConn ~ 5850 4100
+Wire Wire Line
+	9550 1050 9800 1050
+Wire Wire Line
+	9800 1050 9800 1150
+Connection ~ 9800 1050
+Wire Wire Line
+	9800 1050 10100 1050
+Wire Wire Line
+	9550 1300 10000 1300
+$Comp
+L power:GNDD #PWR0110
+U 1 1 5C6DBC6D
+P 10000 1250
+F 0 "#PWR0110" H 10000 1000 50  0001 C CNN
+F 1 "GNDD" H 10004 1095 50  0000 C CNN
+F 2 "" H 10000 1250 50  0001 C CNN
+F 3 "" H 10000 1250 50  0001 C CNN
+	1    10000 1250
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	10000 1250 10000 1300
+Connection ~ 10000 1300
+Wire Wire Line
+	10000 1300 10100 1300
 $EndSCHEMATC
