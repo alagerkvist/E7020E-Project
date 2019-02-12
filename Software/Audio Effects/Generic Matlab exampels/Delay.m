@@ -2,7 +2,7 @@ close all;clear all;clc
 %read in song
 load gong.mat;
 
-fDelayInPercent = 0.2; 
+fDelayInPercent = 0.7; 
 iSamplingsFrequency = 8192; %Sampling frequency
 fOriginalSoundHardness = 0.5;
 fImpulseHardness = 0.5;
