@@ -14,17 +14,6 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
-$Comp
-L Lab1-rescue:R-Device-Lab1-rescue R1
-U 1 1 5C49EC6C
-P 4250 3300
-F 0 "R1" V 4043 3300 50  0000 C CNN
-F 1 "10K" V 4134 3300 50  0000 C CNN
-F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 4180 3300 50  0001 C CNN
-F 3 "~" H 4250 3300 50  0001 C CNN
-	1    4250 3300
-	0    1    1    0   
-$EndComp
 Wire Wire Line
 	4400 3300 4450 3300
 $Comp
@@ -37,17 +26,6 @@ F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 4230 3500 50  0
 F 3 "~" H 4300 3500 50  0001 C CNN
 	1    4300 3500
 	0    1    1    0   
-$EndComp
-$Comp
-L Lab1-rescue:GND-power-Lab1-rescue #PWR09
-U 1 1 5C4A10A9
-P 4150 3500
-F 0 "#PWR09" H 4150 3250 50  0001 C CNN
-F 1 "GND" H 4155 3327 50  0000 C CNN
-F 2 "" H 4150 3500 50  0001 C CNN
-F 3 "" H 4150 3500 50  0001 C CNN
-	1    4150 3500
-	1    0    0    -1  
 $EndComp
 $Comp
 L Lab1-rescue:Crystal-Device-Lab1-rescue Y1
@@ -242,8 +220,6 @@ Wire Wire Line
 Wire Wire Line
 	3450 4650 3650 4650
 Wire Wire Line
-	4100 3300 4000 3300
-Wire Wire Line
 	1300 6950 1300 6750
 Wire Wire Line
 	850  6950 1300 6950
@@ -417,7 +393,6 @@ Wire Wire Line
 	4350 2850 4400 2850
 Wire Wire Line
 	4400 2850 4400 3300
-Connection ~ 4400 3300
 Text Label 4350 2850 0    50   ~ 0
 NRST
 $Comp
@@ -588,17 +563,6 @@ F 3 "" H 1150 3050 50  0001 C CNN
 	1    1150 3050
 	1    0    0    -1  
 $EndComp
-$Comp
-L Lab1-rescue:+3.3V-power-Lab1-rescue #PWR0106
-U 1 1 5C4C0FE6
-P 4000 3300
-F 0 "#PWR0106" H 4000 3150 50  0001 C CNN
-F 1 "+3.3V-power" H 4015 3473 50  0000 C CNN
-F 2 "" H 4000 3300 50  0001 C CNN
-F 3 "" H 4000 3300 50  0001 C CNN
-	1    4000 3300
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	3600 1100 3400 1100
 Connection ~ 3400 1100
@@ -673,17 +637,6 @@ Wire Wire Line
 	10650 1600 10650 1550
 Wire Wire Line
 	6850 2600 6850 2450
-$Comp
-L Lab1-rescue:C-device-Lab1-rescue C23
-U 1 1 5C66D78F
-P 8400 2600
-F 0 "C23" H 8515 2646 50  0000 L CNN
-F 1 "10u" H 8515 2555 50  0000 L CNN
-F 2 "Capacitor_SMD:C_Elec_6.3x7.7" H 8438 2450 50  0001 C CNN
-F 3 "~" H 8400 2600 50  0001 C CNN
-	1    8400 2600
-	-1   0    0    1   
-$EndComp
 $Comp
 L Lab1-rescue:C-device-Lab1-rescue C25
 U 1 1 5C66D796
@@ -1077,28 +1030,6 @@ F 1 "GNDA" H 1705 1527 50  0000 C CNN
 F 2 "" H 1700 1700 50  0001 C CNN
 F 3 "" H 1700 1700 50  0001 C CNN
 	1    1700 1700
-	1    0    0    -1  
-$EndComp
-$Comp
-L Lab1-rescue:GNDA-power #PWR07
-U 1 1 5C586751
-P 3450 4300
-F 0 "#PWR07" H 3450 4050 50  0001 C CNN
-F 1 "GNDA" H 3455 4127 50  0000 C CNN
-F 2 "" H 3450 4300 50  0001 C CNN
-F 3 "" H 3450 4300 50  0001 C CNN
-	1    3450 4300
-	1    0    0    -1  
-$EndComp
-$Comp
-L Lab1-rescue:GNDA-power #PWR012
-U 1 1 5C5867C7
-P 3450 4750
-F 0 "#PWR012" H 3450 4500 50  0001 C CNN
-F 1 "GNDA" H 3455 4577 50  0000 C CNN
-F 2 "" H 3450 4750 50  0001 C CNN
-F 3 "" H 3450 4750 50  0001 C CNN
-	1    3450 4750
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -1749,26 +1680,10 @@ Text Label 1850 5650 0    50   ~ 0
 VBUS
 Wire Wire Line
 	1850 5650 1350 5650
-$Comp
-L Lab1-rescue:GNDA-power #PWR05
-U 1 1 5C6487AC
-P 800 6350
-F 0 "#PWR05" H 800 6100 50  0001 C CNN
-F 1 "GNDA" H 805 6177 50  0000 C CNN
-F 2 "" H 800 6350 50  0001 C CNN
-F 3 "" H 800 6350 50  0001 C CNN
-	1    800  6350
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	750  6250 750  6350
 Wire Wire Line
-	750  6350 800  6350
-Wire Wire Line
 	850  6250 850  6350
-Wire Wire Line
-	850  6350 800  6350
-Connection ~ 800  6350
 Wire Wire Line
 	1150 5950 1250 5950
 Wire Wire Line
@@ -2174,17 +2089,6 @@ NoConn ~ 2650 6950
 NoConn ~ 2650 6850
 NoConn ~ 2650 6750
 NoConn ~ 2650 6650
-$Comp
-L Lab1-rescue:GNDD-power #PWR0109
-U 1 1 5CAE84EF
-P 4250 4100
-F 0 "#PWR0109" H 4250 3850 50  0001 C CNN
-F 1 "GNDD" H 4254 3945 50  0000 C CNN
-F 2 "" H 4250 4100 50  0001 C CNN
-F 3 "" H 4250 4100 50  0001 C CNN
-	1    4250 4100
-	1    0    0    -1  
-$EndComp
 Text Label 8500 3400 2    50   ~ 0
 SPI_MOSI
 $Comp
@@ -2878,4 +2782,127 @@ $EndComp
 Connection ~ 10100 1600
 Wire Wire Line
 	10100 1600 10650 1600
+$Comp
+L Lab1-rescue:GNDA-power #PWR09
+U 1 1 5C679FB9
+P 3450 4750
+F 0 "#PWR09" H 3450 4500 50  0001 C CNN
+F 1 "GNDA" H 3455 4577 50  0000 C CNN
+F 2 "" H 3450 4750 50  0001 C CNN
+F 3 "" H 3450 4750 50  0001 C CNN
+	1    3450 4750
+	1    0    0    -1  
+$EndComp
+$Comp
+L Lab1-rescue:GNDA-power #PWR07
+U 1 1 5C67A08E
+P 3450 4300
+F 0 "#PWR07" H 3450 4050 50  0001 C CNN
+F 1 "GNDA" H 3455 4127 50  0000 C CNN
+F 2 "" H 3450 4300 50  0001 C CNN
+F 3 "" H 3450 4300 50  0001 C CNN
+	1    3450 4300
+	1    0    0    -1  
+$EndComp
+$Comp
+L Lab1-rescue:GNDA-power #PWR057
+U 1 1 5C67A163
+P 4250 4100
+F 0 "#PWR057" H 4250 3850 50  0001 C CNN
+F 1 "GNDA" H 4255 3927 50  0000 C CNN
+F 2 "" H 4250 4100 50  0001 C CNN
+F 3 "" H 4250 4100 50  0001 C CNN
+	1    4250 4100
+	1    0    0    -1  
+$EndComp
+$Comp
+L Lab1-rescue:SW_Push-Switch SW6
+U 1 1 5C67A367
+P 3400 3500
+F 0 "SW6" V 3446 3452 50  0000 R CNN
+F 1 "SW_Push" V 3355 3452 50  0000 R CNN
+F 2 "Button_Switch_SMD:SW_SPST_B3S-1000" H 3400 3700 50  0001 C CNN
+F 3 "" H 3400 3700 50  0001 C CNN
+	1    3400 3500
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Lab1-rescue:C-device-Lab1-rescue C43
+U 1 1 5C67A4A5
+P 3750 3500
+F 0 "C43" H 3865 3546 50  0000 L CNN
+F 1 "0.1u" H 3865 3455 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 3788 3350 50  0001 C CNN
+F 3 "~" H 3750 3500 50  0001 C CNN
+	1    3750 3500
+	1    0    0    -1  
+$EndComp
+$Comp
+L Lab1-rescue:GNDD-power #PWR056
+U 1 1 5C6A077E
+P 4150 3600
+F 0 "#PWR056" H 4150 3350 50  0001 C CNN
+F 1 "GNDD" H 4154 3445 50  0000 C CNN
+F 2 "" H 4150 3600 50  0001 C CNN
+F 3 "" H 4150 3600 50  0001 C CNN
+	1    4150 3600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4150 3500 4150 3600
+$Comp
+L Lab1-rescue:GNDA-power #PWR012
+U 1 1 5C6C690F
+P 3600 3800
+F 0 "#PWR012" H 3600 3550 50  0001 C CNN
+F 1 "GNDA" H 3605 3627 50  0000 C CNN
+F 2 "" H 3600 3800 50  0001 C CNN
+F 3 "" H 3600 3800 50  0001 C CNN
+	1    3600 3800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3400 3700 3600 3700
+Wire Wire Line
+	3600 3700 3600 3800
+Wire Wire Line
+	3750 3650 3750 3700
+Wire Wire Line
+	3750 3700 3600 3700
+Connection ~ 3600 3700
+Wire Wire Line
+	3400 3300 3750 3300
+Connection ~ 4400 3300
+Wire Wire Line
+	3750 3350 3750 3300
+Connection ~ 3750 3300
+Wire Wire Line
+	3750 3300 4400 3300
+Wire Wire Line
+	750  6350 800  6350
+$Comp
+L Lab1-rescue:GNDD-power #PWR0106
+U 1 1 5C76A089
+P 800 6350
+F 0 "#PWR0106" H 800 6100 50  0001 C CNN
+F 1 "GNDD" H 804 6195 50  0000 C CNN
+F 2 "" H 800 6350 50  0001 C CNN
+F 3 "" H 800 6350 50  0001 C CNN
+	1    800  6350
+	1    0    0    -1  
+$EndComp
+Connection ~ 800  6350
+Wire Wire Line
+	800  6350 850  6350
+$Comp
+L Lab1-rescue:CP-Device C23
+U 1 1 5C772344
+P 8400 2600
+F 0 "C23" H 8518 2646 50  0000 L CNN
+F 1 "10u" H 8518 2555 50  0000 L CNN
+F 2 "Capacitor_SMD:CP_Elec_5x5.4" H 8438 2450 50  0001 C CNN
+F 3 "" H 8400 2600 50  0001 C CNN
+	1    8400 2600
+	-1   0    0    1   
+$EndComp
 $EndSCHEMATC
