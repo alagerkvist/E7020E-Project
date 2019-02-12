@@ -4,7 +4,7 @@ EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 1 1
+Sheet 1 2
 Title ""
 Date ""
 Rev ""
@@ -441,7 +441,7 @@ U 1 1 5C4AEFF0
 P 6050 2750
 F 0 "C15" H 6165 2796 50  0000 L CNN
 F 1 "1u" H 6165 2705 50  0000 L CNN
-F 2 "Capacitor_SMD:CP_Elec_4x5.4" H 6088 2600 50  0001 C CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 6088 2600 50  0001 C CNN
 F 3 "~" H 6050 2750 50  0001 C CNN
 	1    6050 2750
 	1    0    0    -1  
@@ -1962,11 +1962,11 @@ $EndComp
 Wire Wire Line
 	2150 7050 2250 7050
 Text Label 3850 7200 0    50   ~ 0
-SPI_MOSI
-Text Label 3500 7150 0    50   ~ 0
-SPI_SCK
+LCD_SPI_MOSI
+Text Label 3550 7150 0    50   ~ 0
+LCD_SPI_SCK
 Text Label 4500 7250 0    50   ~ 0
-SPI_MISO
+LCD_SPI_MISO
 Text Label 3600 7350 0    50   ~ 0
 NRST
 Text Label 3600 7450 0    50   ~ 0
@@ -2102,8 +2102,6 @@ F 3 "~" H 4000 7000 50  0001 C CNN
 	1    4000 7000
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	3500 7150 3450 7150
 $Comp
 L Lab1-rescue:R-Device R32
 U 1 1 5C6D0B56
@@ -2132,96 +2130,8 @@ Wire Wire Line
 Connection ~ 3850 7150
 Wire Wire Line
 	3850 7150 3850 7050
-$Comp
-L Lab1-rescue:+3.3V-power-Lab1-rescue #PWR047
-U 1 1 5C7B6B36
-P 2600 3450
-F 0 "#PWR047" H 2600 3300 50  0001 C CNN
-F 1 "+3.3V-power" H 2615 3623 50  0000 C CNN
-F 2 "" H 2600 3450 50  0001 C CNN
-F 3 "" H 2600 3450 50  0001 C CNN
-	1    2600 3450
-	1    0    0    -1  
-$EndComp
-$Comp
-L Lab1-rescue:R-Device R35
-U 1 1 5C7B6B3C
-P 2600 4400
-F 0 "R35" H 2530 4446 50  0000 R CNN
-F 1 "10k" H 2530 4355 50  0000 R CNN
-F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 2530 4400 50  0001 C CNN
-F 3 "~" H 2600 4400 50  0001 C CNN
-	1    2600 4400
-	-1   0    0    -1  
-$EndComp
-$Comp
-L Lab1-rescue:C-Device C19
-U 1 1 5C7B6B43
-P 3100 4300
-F 0 "C19" H 3215 4346 50  0000 L CNN
-F 1 "0.1u" H 3215 4255 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 3138 4150 50  0001 C CNN
-F 3 "~" H 3100 4300 50  0001 C CNN
-	1    3100 4300
-	1    0    0    -1  
-$EndComp
-$Comp
-L Lab1-rescue:R-Device R33
-U 1 1 5C7B6B4A
-P 2850 4100
-F 0 "R33" H 2780 4146 50  0000 R CNN
-F 1 "1k" H 2780 4055 50  0000 R CNN
-F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 2780 4100 50  0001 C CNN
-F 3 "~" H 2850 4100 50  0001 C CNN
-	1    2850 4100
-	0    1    -1   0   
-$EndComp
-Wire Wire Line
-	2600 3450 2600 3600
-Wire Wire Line
-	2600 4000 2600 4100
-Connection ~ 3100 4100
-Wire Wire Line
-	3100 4100 3100 4150
-$Comp
-L Lab1-rescue:GNDD-power #PWR053
-U 1 1 5C7B6B57
-P 3100 4700
-F 0 "#PWR053" H 3100 4450 50  0001 C CNN
-F 1 "GNDD" H 3104 4545 50  0000 C CNN
-F 2 "" H 3100 4700 50  0001 C CNN
-F 3 "" H 3100 4700 50  0001 C CNN
-	1    3100 4700
-	1    0    0    -1  
-$EndComp
-$Comp
-L Lab1-rescue:GNDD-power #PWR06
-U 1 1 5C7B6B5D
-P 2600 4700
-F 0 "#PWR06" H 2600 4450 50  0001 C CNN
-F 1 "GNDD" H 2604 4545 50  0000 C CNN
-F 2 "" H 2600 4700 50  0001 C CNN
-F 3 "" H 2600 4700 50  0001 C CNN
-	1    2600 4700
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	3100 4700 3100 4450
 Text Label 3300 4100 0    50   ~ 0
 Button5
-Wire Wire Line
-	3100 4100 3300 4100
-$Comp
-L Lab1-rescue:SW_Push-Switch SW4
-U 1 1 5C7B6B67
-P 2600 3800
-F 0 "SW4" V 2646 3752 50  0000 R CNN
-F 1 "SW_Push" V 2555 3752 50  0000 R CNN
-F 2 "Button_Switch_SMD:SW_SPST_B3S-1000" H 2600 4000 50  0001 C CNN
-F 3 "" H 2600 4000 50  0001 C CNN
-	1    2600 3800
-	0    -1   -1   0   
-$EndComp
 Wire Wire Line
 	7950 5350 8400 5350
 Text Label 6100 4000 0    50   ~ 0
@@ -2233,415 +2143,10 @@ Wire Wire Line
 Connection ~ 4000 6850
 Wire Wire Line
 	3450 7250 4400 7250
-Wire Wire Line
-	2600 4100 2600 4250
-Wire Wire Line
-	2600 4550 2600 4700
-Wire Wire Line
-	2700 4100 2600 4100
-Wire Wire Line
-	3000 4100 3100 4100
 Text Label 6150 5500 0    50   ~ 0
 Button4
 Text Label 6150 5400 0    50   ~ 0
 Button5
-Connection ~ 2600 4100
-$Comp
-L Lab1-rescue:+3.3V-power-Lab1-rescue #PWR036
-U 1 1 5CB71F79
-P 5350 700
-F 0 "#PWR036" H 5350 550 50  0001 C CNN
-F 1 "+3.3V-power" H 5365 873 50  0000 C CNN
-F 2 "" H 5350 700 50  0001 C CNN
-F 3 "" H 5350 700 50  0001 C CNN
-	1    5350 700 
-	1    0    0    -1  
-$EndComp
-$Comp
-L Lab1-rescue:R-Device R24
-U 1 1 5CB71F7F
-P 5350 1650
-F 0 "R24" H 5280 1696 50  0000 R CNN
-F 1 "10k" H 5280 1605 50  0000 R CNN
-F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 5280 1650 50  0001 C CNN
-F 3 "~" H 5350 1650 50  0001 C CNN
-	1    5350 1650
-	-1   0    0    -1  
-$EndComp
-$Comp
-L Lab1-rescue:C-Device C35
-U 1 1 5CB71F86
-P 5850 1550
-F 0 "C35" H 5965 1596 50  0000 L CNN
-F 1 "0.1u" H 5965 1505 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 5888 1400 50  0001 C CNN
-F 3 "~" H 5850 1550 50  0001 C CNN
-	1    5850 1550
-	1    0    0    -1  
-$EndComp
-$Comp
-L Lab1-rescue:R-Device R25
-U 1 1 5CB71F8D
-P 5600 1350
-F 0 "R25" H 5530 1396 50  0000 R CNN
-F 1 "1k" H 5530 1305 50  0000 R CNN
-F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 5530 1350 50  0001 C CNN
-F 3 "~" H 5600 1350 50  0001 C CNN
-	1    5600 1350
-	0    1    -1   0   
-$EndComp
-Wire Wire Line
-	5350 700  5350 850 
-Wire Wire Line
-	5350 1250 5350 1350
-Connection ~ 5850 1350
-Wire Wire Line
-	5850 1350 5850 1400
-$Comp
-L Lab1-rescue:GNDD-power #PWR038
-U 1 1 5CB71F98
-P 5850 1950
-F 0 "#PWR038" H 5850 1700 50  0001 C CNN
-F 1 "GNDD" H 5854 1795 50  0000 C CNN
-F 2 "" H 5850 1950 50  0001 C CNN
-F 3 "" H 5850 1950 50  0001 C CNN
-	1    5850 1950
-	1    0    0    -1  
-$EndComp
-$Comp
-L Lab1-rescue:GNDD-power #PWR037
-U 1 1 5CB71F9E
-P 5350 1950
-F 0 "#PWR037" H 5350 1700 50  0001 C CNN
-F 1 "GNDD" H 5354 1795 50  0000 C CNN
-F 2 "" H 5350 1950 50  0001 C CNN
-F 3 "" H 5350 1950 50  0001 C CNN
-	1    5350 1950
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	5850 1950 5850 1700
-Text Label 6050 1350 0    50   ~ 0
-Button1
-Wire Wire Line
-	5850 1350 6050 1350
-$Comp
-L Lab1-rescue:SW_Push-Switch SW2
-U 1 1 5CB71FA7
-P 5350 1050
-F 0 "SW2" V 5396 1002 50  0000 R CNN
-F 1 "SW_Push" V 5305 1002 50  0000 R CNN
-F 2 "Button_Switch_SMD:SW_SPST_B3S-1000" H 5350 1250 50  0001 C CNN
-F 3 "" H 5350 1250 50  0001 C CNN
-	1    5350 1050
-	0    -1   -1   0   
-$EndComp
-Wire Wire Line
-	5350 1350 5350 1500
-Wire Wire Line
-	5350 1800 5350 1950
-Wire Wire Line
-	5450 1350 5350 1350
-Wire Wire Line
-	5750 1350 5850 1350
-Connection ~ 5350 1350
-$Comp
-L Lab1-rescue:+3.3V-power-Lab1-rescue #PWR039
-U 1 1 5CBD4C4B
-P 6400 700
-F 0 "#PWR039" H 6400 550 50  0001 C CNN
-F 1 "+3.3V-power" H 6415 873 50  0000 C CNN
-F 2 "" H 6400 700 50  0001 C CNN
-F 3 "" H 6400 700 50  0001 C CNN
-	1    6400 700 
-	1    0    0    -1  
-$EndComp
-$Comp
-L Lab1-rescue:R-Device R26
-U 1 1 5CBD4C51
-P 6400 1650
-F 0 "R26" H 6330 1696 50  0000 R CNN
-F 1 "10k" H 6330 1605 50  0000 R CNN
-F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 6330 1650 50  0001 C CNN
-F 3 "~" H 6400 1650 50  0001 C CNN
-	1    6400 1650
-	-1   0    0    -1  
-$EndComp
-$Comp
-L Lab1-rescue:C-Device C36
-U 1 1 5CBD4C58
-P 6900 1550
-F 0 "C36" H 7015 1596 50  0000 L CNN
-F 1 "0.1u" H 7015 1505 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 6938 1400 50  0001 C CNN
-F 3 "~" H 6900 1550 50  0001 C CNN
-	1    6900 1550
-	1    0    0    -1  
-$EndComp
-$Comp
-L Lab1-rescue:R-Device R30
-U 1 1 5CBD4C5F
-P 6650 1350
-F 0 "R30" H 6580 1396 50  0000 R CNN
-F 1 "1k" H 6580 1305 50  0000 R CNN
-F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 6580 1350 50  0001 C CNN
-F 3 "~" H 6650 1350 50  0001 C CNN
-	1    6650 1350
-	0    1    -1   0   
-$EndComp
-Wire Wire Line
-	6400 700  6400 850 
-Wire Wire Line
-	6400 1250 6400 1350
-Connection ~ 6900 1350
-Wire Wire Line
-	6900 1350 6900 1400
-$Comp
-L Lab1-rescue:GNDD-power #PWR051
-U 1 1 5CBD4C6A
-P 6900 1950
-F 0 "#PWR051" H 6900 1700 50  0001 C CNN
-F 1 "GNDD" H 6904 1795 50  0000 C CNN
-F 2 "" H 6900 1950 50  0001 C CNN
-F 3 "" H 6900 1950 50  0001 C CNN
-	1    6900 1950
-	1    0    0    -1  
-$EndComp
-$Comp
-L Lab1-rescue:GNDD-power #PWR040
-U 1 1 5CBD4C70
-P 6400 1950
-F 0 "#PWR040" H 6400 1700 50  0001 C CNN
-F 1 "GNDD" H 6404 1795 50  0000 C CNN
-F 2 "" H 6400 1950 50  0001 C CNN
-F 3 "" H 6400 1950 50  0001 C CNN
-	1    6400 1950
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	6900 1950 6900 1700
-Text Label 7100 1350 0    50   ~ 0
-Button2
-Wire Wire Line
-	6900 1350 7100 1350
-$Comp
-L Lab1-rescue:SW_Push-Switch SW3
-U 1 1 5CBD4C79
-P 6400 1050
-F 0 "SW3" V 6446 1002 50  0000 R CNN
-F 1 "SW_Push" V 6355 1002 50  0000 R CNN
-F 2 "Button_Switch_SMD:SW_SPST_B3S-1000" H 6400 1250 50  0001 C CNN
-F 3 "" H 6400 1250 50  0001 C CNN
-	1    6400 1050
-	0    -1   -1   0   
-$EndComp
-Wire Wire Line
-	6400 1350 6400 1500
-Wire Wire Line
-	6400 1800 6400 1950
-Wire Wire Line
-	6500 1350 6400 1350
-Wire Wire Line
-	6800 1350 6900 1350
-Connection ~ 6400 1350
-$Comp
-L Lab1-rescue:+3.3V-power-Lab1-rescue #PWR052
-U 1 1 5CBF5AFC
-P 7450 700
-F 0 "#PWR052" H 7450 550 50  0001 C CNN
-F 1 "+3.3V-power" H 7465 873 50  0000 C CNN
-F 2 "" H 7450 700 50  0001 C CNN
-F 3 "" H 7450 700 50  0001 C CNN
-	1    7450 700 
-	1    0    0    -1  
-$EndComp
-$Comp
-L Lab1-rescue:R-Device R34
-U 1 1 5CBF5B02
-P 7450 1650
-F 0 "R34" H 7380 1696 50  0000 R CNN
-F 1 "10k" H 7380 1605 50  0000 R CNN
-F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 7380 1650 50  0001 C CNN
-F 3 "~" H 7450 1650 50  0001 C CNN
-	1    7450 1650
-	-1   0    0    -1  
-$EndComp
-$Comp
-L Lab1-rescue:C-Device C42
-U 1 1 5CBF5B09
-P 7950 1550
-F 0 "C42" H 8065 1596 50  0000 L CNN
-F 1 "0.1u" H 8065 1505 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 7988 1400 50  0001 C CNN
-F 3 "~" H 7950 1550 50  0001 C CNN
-	1    7950 1550
-	1    0    0    -1  
-$EndComp
-$Comp
-L Lab1-rescue:R-Device R36
-U 1 1 5CBF5B10
-P 7700 1350
-F 0 "R36" H 7630 1396 50  0000 R CNN
-F 1 "1k" H 7630 1305 50  0000 R CNN
-F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 7630 1350 50  0001 C CNN
-F 3 "~" H 7700 1350 50  0001 C CNN
-	1    7700 1350
-	0    1    -1   0   
-$EndComp
-Wire Wire Line
-	7450 700  7450 850 
-Wire Wire Line
-	7450 1250 7450 1350
-Connection ~ 7950 1350
-Wire Wire Line
-	7950 1350 7950 1400
-$Comp
-L Lab1-rescue:GNDD-power #PWR055
-U 1 1 5CBF5B1B
-P 7950 1950
-F 0 "#PWR055" H 7950 1700 50  0001 C CNN
-F 1 "GNDD" H 7954 1795 50  0000 C CNN
-F 2 "" H 7950 1950 50  0001 C CNN
-F 3 "" H 7950 1950 50  0001 C CNN
-	1    7950 1950
-	1    0    0    -1  
-$EndComp
-$Comp
-L Lab1-rescue:GNDD-power #PWR054
-U 1 1 5CBF5B21
-P 7450 1950
-F 0 "#PWR054" H 7450 1700 50  0001 C CNN
-F 1 "GNDD" H 7454 1795 50  0000 C CNN
-F 2 "" H 7450 1950 50  0001 C CNN
-F 3 "" H 7450 1950 50  0001 C CNN
-	1    7450 1950
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	7950 1950 7950 1700
-Text Label 8150 1350 0    50   ~ 0
-Button3
-Wire Wire Line
-	7950 1350 8150 1350
-$Comp
-L Lab1-rescue:SW_Push-Switch SW5
-U 1 1 5CBF5B2A
-P 7450 1050
-F 0 "SW5" V 7496 1002 50  0000 R CNN
-F 1 "SW_Push" V 7405 1002 50  0000 R CNN
-F 2 "Button_Switch_SMD:SW_SPST_B3S-1000" H 7450 1250 50  0001 C CNN
-F 3 "" H 7450 1250 50  0001 C CNN
-	1    7450 1050
-	0    -1   -1   0   
-$EndComp
-Wire Wire Line
-	7450 1350 7450 1500
-Wire Wire Line
-	7450 1800 7450 1950
-Wire Wire Line
-	7550 1350 7450 1350
-Wire Wire Line
-	7850 1350 7950 1350
-Connection ~ 7450 1350
-$Comp
-L Lab1-rescue:+3.3V-power-Lab1-rescue #PWR010
-U 1 1 5CC180A6
-P 2400 1800
-F 0 "#PWR010" H 2400 1650 50  0001 C CNN
-F 1 "+3.3V-power" H 2415 1973 50  0000 C CNN
-F 2 "" H 2400 1800 50  0001 C CNN
-F 3 "" H 2400 1800 50  0001 C CNN
-	1    2400 1800
-	1    0    0    -1  
-$EndComp
-$Comp
-L Lab1-rescue:R-Device R22
-U 1 1 5CC180AC
-P 2400 2750
-F 0 "R22" H 2330 2796 50  0000 R CNN
-F 1 "10k" H 2330 2705 50  0000 R CNN
-F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 2330 2750 50  0001 C CNN
-F 3 "~" H 2400 2750 50  0001 C CNN
-	1    2400 2750
-	-1   0    0    -1  
-$EndComp
-$Comp
-L Lab1-rescue:C-Device C33
-U 1 1 5CC180B3
-P 2900 2650
-F 0 "C33" H 3015 2696 50  0000 L CNN
-F 1 "0.1u" H 3015 2605 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 2938 2500 50  0001 C CNN
-F 3 "~" H 2900 2650 50  0001 C CNN
-	1    2900 2650
-	1    0    0    -1  
-$EndComp
-$Comp
-L Lab1-rescue:R-Device R23
-U 1 1 5CC180BA
-P 2650 2450
-F 0 "R23" H 2580 2496 50  0000 R CNN
-F 1 "1k" H 2580 2405 50  0000 R CNN
-F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 2580 2450 50  0001 C CNN
-F 3 "~" H 2650 2450 50  0001 C CNN
-	1    2650 2450
-	0    1    -1   0   
-$EndComp
-Wire Wire Line
-	2400 1800 2400 1950
-Wire Wire Line
-	2400 2350 2400 2450
-Connection ~ 2900 2450
-Wire Wire Line
-	2900 2450 2900 2500
-$Comp
-L Lab1-rescue:GNDD-power #PWR035
-U 1 1 5CC180C5
-P 2900 3050
-F 0 "#PWR035" H 2900 2800 50  0001 C CNN
-F 1 "GNDD" H 2904 2895 50  0000 C CNN
-F 2 "" H 2900 3050 50  0001 C CNN
-F 3 "" H 2900 3050 50  0001 C CNN
-	1    2900 3050
-	1    0    0    -1  
-$EndComp
-$Comp
-L Lab1-rescue:GNDD-power #PWR017
-U 1 1 5CC180CB
-P 2400 3050
-F 0 "#PWR017" H 2400 2800 50  0001 C CNN
-F 1 "GNDD" H 2404 2895 50  0000 C CNN
-F 2 "" H 2400 3050 50  0001 C CNN
-F 3 "" H 2400 3050 50  0001 C CNN
-	1    2400 3050
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	2900 3050 2900 2800
-Text Label 3100 2450 0    50   ~ 0
-Button4
-Wire Wire Line
-	2900 2450 3100 2450
-$Comp
-L Lab1-rescue:SW_Push-Switch SW1
-U 1 1 5CC180D4
-P 2400 2150
-F 0 "SW1" V 2446 2102 50  0000 R CNN
-F 1 "SW_Push" V 2355 2102 50  0000 R CNN
-F 2 "Button_Switch_SMD:SW_SPST_B3S-1000" H 2400 2350 50  0001 C CNN
-F 3 "" H 2400 2350 50  0001 C CNN
-	1    2400 2150
-	0    -1   -1   0   
-$EndComp
-Wire Wire Line
-	2400 2450 2400 2600
-Wire Wire Line
-	2400 2900 2400 3050
-Wire Wire Line
-	2500 2450 2400 2450
-Wire Wire Line
-	2800 2450 2900 2450
-Connection ~ 2400 2450
 Wire Wire Line
 	4450 4900 4150 4900
 Wire Wire Line
@@ -2905,4 +2410,44 @@ F 3 "" H 8400 2600 50  0001 C CNN
 	1    8400 2600
 	-1   0    0    1   
 $EndComp
+NoConn ~ 4450 5200
+NoConn ~ 4450 5300
+NoConn ~ 4450 5400
+Wire Wire Line
+	3550 7150 3450 7150
+$Sheet
+S 5700 850  1000 750 
+U 5C725C26
+F0 "Buttons" 50
+F1 "Buttons.sch" 50
+F2 "3.3v" I L 5700 1100 50 
+F3 "Button5" O R 6700 1550 50 
+F4 "Button4" O R 6700 1400 50 
+F5 "Button3" O R 6700 1250 50 
+F6 "Button2" O R 6700 1100 50 
+F7 "Button1" O R 6700 950 50 
+$EndSheet
+Wire Wire Line
+	5700 1100 5000 1100
+Connection ~ 5000 1100
+Text Label 7000 950  0    50   ~ 0
+Button1
+Text Label 7000 1100 0    50   ~ 0
+Button2
+Text Label 7000 1250 0    50   ~ 0
+Button3
+Wire Wire Line
+	6700 950  7000 950 
+Wire Wire Line
+	6700 1100 7000 1100
+Wire Wire Line
+	6700 1250 7000 1250
+Text Label 7000 1400 0    50   ~ 0
+Button4
+Wire Wire Line
+	6700 1400 7000 1400
+Text Label 7000 1550 0    50   ~ 0
+Button5
+Wire Wire Line
+	6700 1550 7000 1550
 $EndSCHEMATC
