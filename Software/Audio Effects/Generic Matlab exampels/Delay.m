@@ -2,9 +2,9 @@ close all;clear all;clc
 %read in song
 load gong.mat;
 
-fDelayInPercent = 0.7; 
+fDelayInPercent = 0.5; 
 iSamplingsFrequency = 8192; %Sampling frequency
-fOriginalSoundHardness = 0.5;
+fOriginalSoundHardness = 0.1;
 fImpulseHardness = 0.5;
 iTotalNumberOfSampels=length(y); %Length of input signal. 
 aSoundVector=y(:,1); %Vector form/2D version of length 
