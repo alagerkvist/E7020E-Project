@@ -14,7 +14,7 @@ iDelayedSignalSampels = length(y); %Length of the delayed signal.
 aImpulseVector = zeros(length(y),1); %Impulse vector
 iImpulseVector(1) = fOriginalSoundHardness; 
 iImpulseVector(iDelayInSamples)= fImpulseHardness ; %Impulse at delay 
-aEchoedSound = conv(aSoundVector,iImpulseVector); %Convolution
+aDelayedSound = conv(aSoundVector,iImpulseVector); %Convolution
 
 
 %plots
@@ -23,8 +23,8 @@ plot(y); %Plot of original voice
 subplot(3,1,2);
 plot(iImpulseVector); %plot of impulse  
 subplot(3,1,3); 
-plot(aEchoedSound); %Plot of Echoed sound 
+plot(aDelayedSound); %Plot of Echoed sound 
  
-sound(aEchoedSound,iSamplingsFrequency); %Echoed sound
+sound(aDelayedSound,iSamplingsFrequency); %Echoed sound
 
 
