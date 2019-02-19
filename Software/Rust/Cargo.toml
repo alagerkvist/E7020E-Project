@@ -1,0 +1,65 @@
+[package]
+authors = ["Per Lindgren <per.lindgren@ltu.se>"]
+edition = "2018"
+readme = "README.md"
+name = "app"
+version = "0.1.0"
+build = "build.rs"
+# [patch.crates-io]
+# # stm32f4xx-hal = { path = "../stm32f4xx-hal" }
+# stm32fxx-hal = {git = "https://github.com/stm32-rs/stm32f4xx-hal.git" }
+
+[dependencies]
+cortex-m-rt = "0.6.7"
+cortex-m-semihosting = "0.3.2"
+
+# panic-abort = "0.3.1" # requires nightly toolchain
+panic-halt = "0.2.0"
+panic-semihosting = "0.5.1"
+panic-itm = "0.4.0"
+
+bare-metal = "0.2.4"
+nb = "0.1.1"
+heapless = "0.4.1"
+
+[dependencies.cortex-m-rtfm]
+version = "0.4.0"
+optional = true
+
+[dependencies.cortex-m]
+version = "0.5.8"
+# features = ["inline-asm"] # <- currently requires nightly compiler
+
+# Uncomment for the allocator example.
+# alloc-cortex-m = "0.3.5"
+
+[dependencies.stm32f4]
+version = "0.6.0"
+features = ["stm32f413", "rt"]
+optional = true
+
+[dependencies.stm32f4xx-hal]
+git = "https://github.com/stm32-rs/stm32f4xx-hal.git"
+version = "0.3.0"
+features = ["stm32f413", "rt"]
+optional = true
+
+[features]
+pac = ["stm32f4"]
+hal = ["stm32f4xx-hal"]
+rtfm = ["cortex-m-rtfm"]
+rtfm-tq = ["cortex-m-rtfm/timer-queue"]
+
+# this lets you use `cargo fix`!
+[[bin]]
+name = "app"
+test = false
+bench = false
+
+[profile.release]
+incremental = false # disable incremental build to allow lto on nightly
+codegen-units = 1   # better optimizations
+debug = true        # symbols are nice and they don't increase the size on Flash
+lto = true          # better optimizations
+
+
