@@ -38,23 +38,22 @@ TBD
 
 ## Grades
 **3**
-* Get a sinus wave to output to the codec
+* Control lamp with PWM signal through UART/potentiometer/button
+
+* **Christoffer Forsberg** - *PWM signal*
+* **Anders Lagerkvist** - *ADC for potentiometer*
+* **Gustav Larsson** - *Button and UART*
+
+**4**
 * Store input siganl in RAM with the help of a button
-* Light lamp through UART
-* Implement I2S/(I2C/SPI) for audio codec
-
-* **Christoffer Forsberg** - *UART and PWM signals*
-* **Anders Lagerkvist** - *Run output with sine function I2S*
-* **Gustav Larsson** - *Store input signal with button I2C/SPI*
-
-**4** 
+* Get a sinus wave to output to the codec
 * Do an echo with the "signal"
 * Show settings on LCD
+* Implement I2S/(I2C/SPI) for audio codec
 
-* **Christoffer Forsberg** - *Signal processing*
-* **Anders Lagerkvist** - *LCD*
-* **Gustav Larsson** - *LCD*
-
+* **Christoffer Forsberg** - *Signal processing, store audio input to RAM with button*
+* **Anders Lagerkvist** - *LCD, I2S sine wave output to codec*
+* **Gustav Larsson** - *LCD I2C/SPI*
 
 **5**
 * Overlay two signals as output
