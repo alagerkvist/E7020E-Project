@@ -106,13 +106,20 @@ where
     }
 
     pub fn update_duty(&mut self, duty: u32){
-        self.cd.set_low();
         self.cs.set_low();
-        let msb_adress = 0x10 + (4>>4);
-        let lsb_adress = 0x00 + (2&0x0F);
+        self.cd.set_low();
+        let msb_adress = 0x10 + (0x42>>4);
+        let lsb_adress = 0x00 + (0x42&0x0F);
         let adress_page = 0xB0 + (0&0x0F);
         self.spi.write(&[msb_adress, lsb_adress, adress_page]);
-        
+        self.cd.set_high();
+        self.spi.write(Letter::Space.value());
+        self.spi.write(Letter::Space.value());
+        self.cd.set_low();
+        let msb_adress = 0x10 + (0x42>>4);
+        let lsb_adress = 0x00 + (0x42&0x0F);
+        let adress_page = 0xB0 + (0&0x0F);
+        self.spi.write(&[msb_adress, lsb_adress, adress_page]);
         self.cd.set_high();
         self.spi.write(Letter::Zero.value());
     }
