@@ -128,6 +128,7 @@ where
         for (_,letter) in s.chars().enumerate(){
             match letter {
                 ' ' => { self.spi.write(Letter::Space.value()); },
+                '%' => { self.spi.write(Letter::Percent.value()); }
                 ':' => { self.spi.write(Letter::Colon.value()); },
                 '0' => { self.spi.write(Letter::Zero.value()); },
                 '1' => { self.spi.write(Letter::One.value()); },

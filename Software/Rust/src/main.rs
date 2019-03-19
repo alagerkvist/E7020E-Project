@@ -1,5 +1,3 @@
-// #![deny(unsafe_code)]
-// #![deny(warnings)]
 #![no_main]
 #![no_std]
 
@@ -12,7 +10,11 @@ use cortex_m::{asm, iprintln};
 use hal::stm32::ITM;
 use hal::stm32::ADC1;
 use hal::stm32::GPIOB;
+use hal::stm32::SPI3;
 use hal::spi::{Spi, Mode, Phase, Polarity, NoMiso};
+use hal::gpio::{Alternate, AF6, PushPull, Output};
+use hal::gpio::gpioc::{PC10, PC11, PC12};
+use hal::gpio::gpioa::{PA15};
 use rtfm::{app, Instant};
 mod lcd;
 use lcd::*;
@@ -26,7 +28,7 @@ const APP: () = {
     static mut Pwm_off: u32 = 0;
     static mut ITM: ITM = ();    
     static mut ADC: ADC1 = ();
-    static mut LCD: lcd::EA_dogs102_6w = None;
+    static mut LCD_SCREEN: EA_dogs102_6w<Spi<SPI3, (PC10<Alternate<AF6>>, NoMiso, PC12<Alternate<AF6>>)>, PA15<Output<PushPull>>, PC11<Output<PushPull>>> = ();
     //static mut adc_data: dr<hal::stm32::adc1> = ();
     // init runs in an interrupt free section
     #[init(schedule = [on], resources=[Pwm_on, Pwm_off, Duty_cycle], spawn=[update_pwm])]
@@ -81,7 +83,7 @@ const APP: () = {
             clocks
         );
 
-        let mut lcd1 = lcd::EA_dogs102_6w::init(spi, cs, cd).unwrap();
+        let mut lcd1 = EA_dogs102_6w::init(spi, cs, cd).unwrap();
         lcd1.write_word("Duty cycle: ");
         
         //lcd1.init();
@@ -99,7 +101,7 @@ const APP: () = {
         // pass on late resources
 
         schedule.on(Instant::now());
-        LCD = lcd1;
+        LCD_SCREEN = lcd1;
         GPIOB = device.GPIOB;
         ADC = device.ADC1;
         ITM = core.ITM;
@@ -139,12 +141,15 @@ const APP: () = {
         *resources.Duty_cycle = dc;
     }
 
-    #[task(priority = 3, resources = [ITM, Duty_cycle], spawn = [update_pwm])]
+    #[task(priority = 3, resources = [ITM, LCD_SCREEN], spawn = [update_pwm])]
     fn change_freq(val: u32) {
         let duty_cycle_percent: f32 = ((val as f32) * (80.0-20.0) / (4050.0) + 20.0);
         spawn.update_pwm(duty_cycle_percent / 100.0);
         let stim = &mut resources.ITM.stim[0];
-
+        // resources.LCD_SCREEN.lock(|lcd_screen|{
+        //     lcd_screen.write_word("sd");
+        // });
+        LCD_SCREEN.update_duty(duty_cycle_percent as u32);
         iprintln!(stim, "val: {}", duty_cycle_percent);
     }
 
