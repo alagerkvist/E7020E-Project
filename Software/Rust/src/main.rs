@@ -101,10 +101,11 @@ const APP: () = {
         // pass on late resources
 
         schedule.on(Instant::now());
-        LCD_SCREEN = lcd1;
         GPIOB = device.GPIOB;
         ADC = device.ADC1;
         ITM = core.ITM;
+        LCD_SCREEN = lcd1;
+
     }
 
     #[idle]
@@ -149,7 +150,7 @@ const APP: () = {
         // resources.LCD_SCREEN.lock(|lcd_screen|{
         //     lcd_screen.write_word("sd");
         // });
-        LCD_SCREEN.update_duty(duty_cycle_percent as u32);
+        resources.LCD_SCREEN.update_duty(duty_cycle_percent as u32);
         iprintln!(stim, "val: {}", duty_cycle_percent);
     }
 
