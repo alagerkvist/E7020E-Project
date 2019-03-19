@@ -147,9 +147,6 @@ const APP: () = {
         let duty_cycle_percent: f32 = ((val as f32) * (80.0-20.0) / (4050.0) + 20.0);
         spawn.update_pwm(duty_cycle_percent / 100.0);
         let stim = &mut resources.ITM.stim[0];
-        // resources.LCD_SCREEN.lock(|lcd_screen|{
-        //     lcd_screen.write_word("sd");
-        // });
         resources.LCD_SCREEN.update_duty(duty_cycle_percent as u32);
         iprintln!(stim, "val: {}", duty_cycle_percent);
     }
