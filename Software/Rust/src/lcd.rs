@@ -127,8 +127,8 @@ where
     pub fn write_word(&mut self, s: &str){
         self.cd.set_low();
         self.cs.set_low();
-        let msb_adress = 0x10 + (0x42>>4);
-        let lsb_adress = 0x00 + (0x42&0x0F);
+        let msb_adress = 0x10 + (0x00>>4); //0x42 set colum address
+        let lsb_adress = 0x00 + (0x00&0x0F); //Same but with the lowest bits
         let adress_page = 0xB0 + (0&0x0F);
         self.spi.write(&[msb_adress, lsb_adress, adress_page]);
         self.cd.set_high();
