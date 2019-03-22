@@ -17,6 +17,7 @@ const APP: () = {
     fn init() {
         let stim = &mut core.ITM.stim[0];
         iprintln!(stim, "hello codec");
+        
         device.RCC.cr.modify(|_,w| {
             w.plli2son().on()
             .hseon().on()
@@ -25,25 +26,31 @@ const APP: () = {
         device.RCC.plli2scfgr.modify(|_,w| {
             unsafe {
                 w.plli2sr().bits(0b100)
-                .plli2sq().bits(0b110)
+                .plli2sm().bits(0b110)
                 .plli2sn().bits(0b10010110)
             }
         });
-        let mut rcc_cfgr = device.RCC.cfgr.read().bits();
-        rcc_cfgr &= 0xFF7FFFFF;
+        // let mut rcc_cfgr = device.RCC.cfgr.read().bits();
+        // rcc_cfgr &= 0xFF7FFFFF;
         device.RCC.cfgr.modify(|_, w| {
-            unsafe {
-                w.bits(rcc_cfgr)
-            }
+            w.i2ssrc().plli2s()
+            // unsafe {
+            //     w.bits(rcc_cfgr)
+            // }
         });
         device.RCC.apb1enr.modify(|_, w| {
-            w.spi3en().enabled()
+            w.spi2en().enabled()
         });
 
         device.RCC.ahb1enr.modify(|_, w| {
             w.gpioben().enabled()
             .gpiocen().enabled()
         });
+        
+        device.RCC.cfgr.modify(|_, w|  { 
+            w.mco2().sysclk().mco2pre().div4() 
+        });
+
 
         let rcc = device.RCC.constrain();
         let clocks = rcc.cfgr.freeze();
@@ -67,6 +74,9 @@ const APP: () = {
         );
         device.GPIOC.ospeedr.modify(|_, w| w.ospeedr6().very_high_speed());
 
+        device.GPIOC.moder.modify(|_, w| w.moder9().alternate()); //bits(0b10));
+        device.GPIOC.ospeedr.modify(|_, w| w.ospeedr9().very_high_speed()); // .bits(0b11));
+
         let gpioc = device.GPIOC.split();
         let _mclk = gpioc.pc6.into_alternate_af5();
         let gpiob = device.GPIOB.split();
@@ -74,6 +84,7 @@ const APP: () = {
         let _slck = gpiob.pb13.into_alternate_af5();
         let _sdin = gpiob.pb14.into_alternate_af6();
         let _sdout = gpiob.pb15.into_alternate_af5();
+        
         device.SPI2.i2scfgr.modify(|_, w| {
             w.i2se().disabled()
         });
@@ -88,11 +99,15 @@ const APP: () = {
         });
 
         device.SPI2.i2spr.modify(|_, w|{
-            w.mckoe().enabled()
+            unsafe{
+                w.mckoe().enabled()
+                .i2sdiv().bits(0b10)
+            }
         });
         device.SPI2.i2scfgr.modify(|_, w| {
             w.i2se().enabled()
         });
+        
 
         cs.set_high();
         cs.set_low();
@@ -100,7 +115,7 @@ const APP: () = {
 
 
         cs.set_low();
-        let mut something = [0x9E, 0x04, 0x20];
+        let mut something = [0x9E, 0x04, 0x09];
         let  data = spi.transfer(&mut something);
         match data {
                 Ok(v) => iprintln!(stim, "working with version: {:?}", v),
@@ -109,7 +124,7 @@ const APP: () = {
         cs.set_high();
 
         cs.set_low();
-        let mut something = [0x9E, 0x06, 0x00];
+        let mut something = [0x9E, 0x06, 0x18];
         let  data = spi.transfer(&mut something);
         match data {
                 Ok(v) => iprintln!(stim, "working with version: {:?}", v),
@@ -125,28 +140,39 @@ const APP: () = {
                 Err(e) => iprintln!(stim, "error parsing header: {:?}", e),
         }
         cs.set_high();
+        
+        
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        /*
+        loop {
+            let mut buf: [u32; 1000] = [0;1000];
+            let mut index = 0;
+            
+            for i in 0..1000 {
+                while !device.SPI2.sr.read().rxne().bit_is_set(){}
+                let sr = device.SPI2.sr.read();
+                if sr.ovr().bit_is_set() {
+                    //iprintln!(stim, "Ovr error!");
+                } else if sr.udr().bit_is_set() {
+                    //iprintln!(stim, "udr error!");
+                } else if sr.fre().bit_is_set() {
+                    //iprintln!(stim, "fre error!");
+                } else if sr.rxne().bit_is_set() {
+                    let byte = device.SPI2.dr.read().bits();
+                    buf[i] = byte;
+                } else {
+                    //iprintln!(stim, "Would block!");
+                }
+            }
+            for i in 0..1000 {
+                iprintln!(stim, "{:?}", buf[i]);
+                for _ in 0..1000{
+                    asm::nop();
+                }
+            }
+        }
+        */
         // let mut something = [0x9E, 0x02, 0x40];
         // //let data = spi.write(&[0x9E, 0x84, 0x20]);
         // let  data = spi.transfer(&mut something);
@@ -355,11 +381,11 @@ const APP: () = {
 
         let mut button4 = gpiob.pb4.into_pull_up_input();
         let mut button5 = gpiob.pb5.into_pull_up_input();
-        
+        */
 
        
         // A full cycle, 16-bit, 2's complement Sine wave lookup table
-        let sine: [u16; 256] = [
+        let sine: [u32; 256] = [
         0x0000, 0x0324, 0x0647, 0x096a, 0x0c8b, 0x0fab, 0x12c8, 0x15e2, 
         0x18f8, 0x1c0b, 0x1f19, 0x2223, 0x2528, 0x2826, 0x2b1f, 0x2e11,
         0x30fb, 0x33de, 0x36ba, 0x398c, 0x3c56, 0x3f17, 0x41ce, 0x447a, 
@@ -393,20 +419,15 @@ const APP: () = {
         0xcf05, 0xd1ef, 0xd4e1, 0xd7da, 0xdad8, 0xdddd, 0xe0e7, 0xe3f5, 
         0xe708, 0xea1e, 0xed38, 0xf055, 0xf375, 0xf696, 0xf9b9, 0xfcdc,
         ];
-        */
-        // loop {
-        //     let sr = device.SPI3.sr.read();
-        //     let byte: u32 = 255;
-        //     if sr.ovr().bit_is_set() {
-        //         iprintln!(stim, "Ovr error!");
-        //     } else if sr.txe().bit_is_set() {
-        //         device.SPI3.dr.write(|w| unsafe{ w.bits(0x)});
-        //         device.SPI3.dr.write(|w| unsafe{ w.bits(byte)});
-        //     } else {
-        //         iprintln!(stim, "Would block!");
-        //     }
 
-        // }
+        asm::bkpt();
+        
+        loop {
+            for i in 0..256 {
+                while !device.SPI3.sr.read().txe().bit_is_set() {}
+                device.SPI3.dr.write(|w| unsafe{ w.bits(sine[i])});
+            }
+        }
     }
     
     #[idle]

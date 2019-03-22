@@ -35,13 +35,13 @@ version = "0.5.8"
 
 [dependencies.stm32f4]
 version = "0.6.0"
-features = ["stm32f413", "rt"]
+features = ["stm32f411", "rt"]
 optional = true
 
 [dependencies.stm32f4xx-hal]
 git = "https://github.com/stm32-rs/stm32f4xx-hal.git"
 version = "0.3.0"
-features = ["stm32f413", "rt"]
+features = ["stm32f411", "rt"]
 
 [features]
 pac = ["stm32f4"]
