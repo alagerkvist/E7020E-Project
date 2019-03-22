@@ -17,6 +17,7 @@ const APP: () = {
     fn init() {
         let stim = &mut core.ITM.stim[0];
         iprintln!(stim, "hello codec");
+        
         device.RCC.cr.modify(|_,w| {
             w.plli2son().on()
             .hseon().on()
@@ -45,6 +46,11 @@ const APP: () = {
             w.gpioben().enabled()
             .gpiocen().enabled()
         });
+        
+        device.RCC.cfgr.modify(|_, w|  { 
+            w.mco2().sysclk().mco2pre().div4() 
+        });
+
 
         let rcc = device.RCC.constrain();
         let clocks = rcc.cfgr.freeze();
@@ -68,6 +74,9 @@ const APP: () = {
         );
         device.GPIOC.ospeedr.modify(|_, w| w.ospeedr6().very_high_speed());
 
+        device.GPIOC.moder.modify(|_, w| w.moder9().alternate()); //bits(0b10));
+        device.GPIOC.ospeedr.modify(|_, w| w.ospeedr9().very_high_speed()); // .bits(0b11));
+
         let gpioc = device.GPIOC.split();
         let _mclk = gpioc.pc6.into_alternate_af5();
         let gpiob = device.GPIOB.split();
@@ -75,6 +84,7 @@ const APP: () = {
         let _slck = gpiob.pb13.into_alternate_af5();
         let _sdin = gpiob.pb14.into_alternate_af6();
         let _sdout = gpiob.pb15.into_alternate_af5();
+        
         device.SPI2.i2scfgr.modify(|_, w| {
             w.i2se().disabled()
         });
@@ -97,6 +107,7 @@ const APP: () = {
         device.SPI2.i2scfgr.modify(|_, w| {
             w.i2se().enabled()
         });
+        
 
         cs.set_high();
         cs.set_low();
@@ -104,7 +115,7 @@ const APP: () = {
 
 
         cs.set_low();
-        let mut something = [0x9E, 0x04, 0x20];
+        let mut something = [0x9E, 0x04, 0x29];
         let  data = spi.transfer(&mut something);
         match data {
                 Ok(v) => iprintln!(stim, "working with version: {:?}", v),
@@ -129,21 +140,36 @@ const APP: () = {
                 Err(e) => iprintln!(stim, "error parsing header: {:?}", e),
         }
         cs.set_high();
+        
+        
+
 
         /*
         loop {
-            let sr = device.SPI2.sr.read();
-            if sr.ovr().bit_is_set() {
-                iprintln!(stim, "Ovr error!");
-            } else if sr.udr().bit_is_set() {
-                iprintln!(stim, "Ovr error!");
-            } else if sr.fre().bit_is_set() {
-                iprintln!(stim, "Ovr error!");
-            } else if sr.rxne().bit_is_set() {
-                let byte = device.SPI2.dr.read().bits();
-                iprintln!(stim, "{:?}", byte);
-            } else {
-                iprintln!(stim, "Would block!");
+            let mut buf: [u32; 1000] = [0;1000];
+            let mut index = 0;
+            
+            for i in 0..1000 {
+                while !device.SPI2.sr.read().rxne().bit_is_set(){}
+                let sr = device.SPI2.sr.read();
+                if sr.ovr().bit_is_set() {
+                    //iprintln!(stim, "Ovr error!");
+                } else if sr.udr().bit_is_set() {
+                    //iprintln!(stim, "udr error!");
+                } else if sr.fre().bit_is_set() {
+                    //iprintln!(stim, "fre error!");
+                } else if sr.rxne().bit_is_set() {
+                    let byte = device.SPI2.dr.read().bits();
+                    buf[i] = byte;
+                } else {
+                    //iprintln!(stim, "Would block!");
+                }
+            }
+            for i in 0..1000 {
+                iprintln!(stim, "{:?}", buf[i]);
+                for _ in 0..1000{
+                    asm::nop();
+                }
             }
         }
         */
