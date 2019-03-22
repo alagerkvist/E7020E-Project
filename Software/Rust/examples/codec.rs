@@ -131,26 +131,20 @@ const APP: () = {
         cs.set_high();
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        loop {
+            let sr = device.SPI3.sr.read();
+            if sr.ovr().bit_is_set() {
+                iprintln!(stim, "Ovr error!");
+            } else if sr.udr().bit_is_set() {
+                iprintln!(stim, "Ovr error!");
+            } else if sr.fre().bit_is_set() {
+                iprintln!(stim, "Ovr error!");
+            } else if sr.rxe().bit_is_set() {
+                let byte = spi.dr.read();
+            } else {
+                iprintln!(stim, "Would block!");
+            }
+        }
         // let mut something = [0x9E, 0x02, 0x40];
         // //let data = spi.write(&[0x9E, 0x84, 0x20]);
         // let  data = spi.transfer(&mut something);
