@@ -115,7 +115,7 @@ const APP: () = {
 
 
         cs.set_low();
-        let mut something = [0x9E, 0x04, 0x29];
+        let mut something = [0x9E, 0x04, 0x09];
         let  data = spi.transfer(&mut something);
         match data {
                 Ok(v) => iprintln!(stim, "working with version: {:?}", v),
@@ -124,7 +124,7 @@ const APP: () = {
         cs.set_high();
 
         cs.set_low();
-        let mut something = [0x9E, 0x06, 0x00];
+        let mut something = [0x9E, 0x06, 0x18];
         let  data = spi.transfer(&mut something);
         match data {
                 Ok(v) => iprintln!(stim, "working with version: {:?}", v),
@@ -381,11 +381,11 @@ const APP: () = {
 
         let mut button4 = gpiob.pb4.into_pull_up_input();
         let mut button5 = gpiob.pb5.into_pull_up_input();
-        
+        */
 
        
         // A full cycle, 16-bit, 2's complement Sine wave lookup table
-        let sine: [u16; 256] = [
+        let sine: [u32; 256] = [
         0x0000, 0x0324, 0x0647, 0x096a, 0x0c8b, 0x0fab, 0x12c8, 0x15e2, 
         0x18f8, 0x1c0b, 0x1f19, 0x2223, 0x2528, 0x2826, 0x2b1f, 0x2e11,
         0x30fb, 0x33de, 0x36ba, 0x398c, 0x3c56, 0x3f17, 0x41ce, 0x447a, 
@@ -419,20 +419,15 @@ const APP: () = {
         0xcf05, 0xd1ef, 0xd4e1, 0xd7da, 0xdad8, 0xdddd, 0xe0e7, 0xe3f5, 
         0xe708, 0xea1e, 0xed38, 0xf055, 0xf375, 0xf696, 0xf9b9, 0xfcdc,
         ];
-        */
-        // loop {
-        //     let sr = device.SPI3.sr.read();
-        //     let byte: u32 = 255;
-        //     if sr.ovr().bit_is_set() {
-        //         iprintln!(stim, "Ovr error!");
-        //     } else if sr.txe().bit_is_set() {
-        //         device.SPI3.dr.write(|w| unsafe{ w.bits(0x)});
-        //         device.SPI3.dr.write(|w| unsafe{ w.bits(byte)});
-        //     } else {
-        //         iprintln!(stim, "Would block!");
-        //     }
 
-        // }
+        asm::bkpt();
+        
+        loop {
+            for i in 0..256 {
+                while !device.SPI3.sr.read().txe().bit_is_set() {}
+                device.SPI3.dr.write(|w| unsafe{ w.bits(sine[i])});
+            }
+        }
     }
     
     #[idle]
