@@ -25,19 +25,20 @@ const APP: () = {
         device.RCC.plli2scfgr.modify(|_,w| {
             unsafe {
                 w.plli2sr().bits(0b100)
-                .plli2sq().bits(0b110)
+                .plli2sm().bits(0b110)
                 .plli2sn().bits(0b10010110)
             }
         });
-        let mut rcc_cfgr = device.RCC.cfgr.read().bits();
-        rcc_cfgr &= 0xFF7FFFFF;
+        // let mut rcc_cfgr = device.RCC.cfgr.read().bits();
+        // rcc_cfgr &= 0xFF7FFFFF;
         device.RCC.cfgr.modify(|_, w| {
-            unsafe {
-                w.bits(rcc_cfgr)
-            }
+            w.i2ssrc().plli2s()
+            // unsafe {
+            //     w.bits(rcc_cfgr)
+            // }
         });
         device.RCC.apb1enr.modify(|_, w| {
-            w.spi3en().enabled()
+            w.spi2en().enabled()
         });
 
         device.RCC.ahb1enr.modify(|_, w| {
@@ -88,7 +89,10 @@ const APP: () = {
         });
 
         device.SPI2.i2spr.modify(|_, w|{
-            w.mckoe().enabled()
+            unsafe{
+                w.mckoe().enabled()
+                .i2sdiv().bits(0b10)
+            }
         });
         device.SPI2.i2scfgr.modify(|_, w| {
             w.i2se().enabled()
