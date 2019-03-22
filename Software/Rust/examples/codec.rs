@@ -8,7 +8,6 @@ extern crate stm32f4xx_hal as hal;
 use crate::hal::prelude::*;
 use cortex_m::{asm, iprintln};
 use hal::spi::{Spi, Mode, Phase, Polarity};
-use hal::gpio::ExtiPin;
 use rtfm::{app};
 
 #[app(device = hal::stm32)]
@@ -18,6 +17,34 @@ const APP: () = {
     fn init() {
         let stim = &mut core.ITM.stim[0];
         iprintln!(stim, "hello codec");
+        device.RCC.cr.modify(|_,w| {
+            w.plli2son().on()
+            .hseon().on()
+        });
+
+        device.RCC.plli2scfgr.modify(|_,w| {
+            unsafe {
+                w.plli2sr().bits(0b100)
+                .plli2sq().bits(0b110)
+                .plli2sn().bits(0b10010110)
+            }
+        });
+        let mut rcc_cfgr = device.RCC.cfgr.read().bits();
+        rcc_cfgr &= 0xFF7FFFFF;
+        device.RCC.cfgr.modify(|_, w| {
+            unsafe {
+                w.bits(rcc_cfgr)
+            }
+        });
+        device.RCC.apb1enr.modify(|_, w| {
+            w.spi3en().enabled()
+        });
+
+        device.RCC.ahb1enr.modify(|_, w| {
+            w.gpioben().enabled()
+            .gpiocen().enabled()
+        });
+
         let rcc = device.RCC.constrain();
         let clocks = rcc.cfgr.freeze();
         
@@ -29,16 +56,297 @@ const APP: () = {
 
         pub const MODE: Mode = Mode {
             polarity: Polarity::IdleHigh,
-            phase: Phase::CaptureOnFirstTransition,
+            phase: Phase::CaptureOnSecondTransition,
         };
         let mut spi = Spi::spi1(
             device.SPI1,
             (sck, miso, mosi),
             MODE,
-            10_000_000.hz(),
+            1_000_000.hz(),
             clocks
         );
+        device.GPIOC.ospeedr.modify(|_, w| w.ospeedr6().very_high_speed());
 
+        let gpioc = device.GPIOC.split();
+        let _mclk = gpioc.pc6.into_alternate_af5();
+        let gpiob = device.GPIOB.split();
+        let _lrck = gpiob.pb12.into_alternate_af5();
+        let _slck = gpiob.pb13.into_alternate_af5();
+        let _sdin = gpiob.pb14.into_alternate_af6();
+        let _sdout = gpiob.pb15.into_alternate_af5();
+        device.SPI2.i2scfgr.modify(|_, w| {
+            w.i2se().disabled()
+        });
+
+        device.SPI2.i2scfgr.modify(|_, w| {
+            w.i2smod().i2smode()
+            .i2scfg().master_rx()
+            .i2sstd().msb()
+            .datlen().twenty_four_bit()
+            .chlen().thirty_two_bit()
+            .ckpol().idle_high()
+        });
+
+        device.SPI2.i2spr.modify(|_, w|{
+            w.mckoe().enabled()
+        });
+        device.SPI2.i2scfgr.modify(|_, w| {
+            w.i2se().enabled()
+        });
+
+        cs.set_high();
+        cs.set_low();
+        cs.set_high();
+
+
+        cs.set_low();
+        let mut something = [0x9E, 0x04, 0x20];
+        let  data = spi.transfer(&mut something);
+        match data {
+                Ok(v) => iprintln!(stim, "working with version: {:?}", v),
+                Err(e) => iprintln!(stim, "error parsing header: {:?}", e),
+        }
+        cs.set_high();
+
+        cs.set_low();
+        let mut something = [0x9E, 0x06, 0x00];
+        let  data = spi.transfer(&mut something);
+        match data {
+                Ok(v) => iprintln!(stim, "working with version: {:?}", v),
+                Err(e) => iprintln!(stim, "error parsing header: {:?}", e),
+        }
+        cs.set_high();
+
+        cs.set_low();
+        let mut something = [0x9F, 0x04];
+        let  data = spi.transfer(&mut something);
+        match data {
+                Ok(v) => iprintln!(stim, "working with version: {:?}", v),
+                Err(e) => iprintln!(stim, "error parsing header: {:?}", e),
+        }
+        cs.set_high();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // let mut something = [0x9E, 0x02, 0x40];
+        // //let data = spi.write(&[0x9E, 0x84, 0x20]);
+        // let  data = spi.transfer(&mut something);
+        // match data {
+        //         Ok(v) => iprintln!(stim, "working with version: {:?}", v),
+        //         Err(e) => iprintln!(stim, "error parsing header: {:?}", e),
+        // }
+        // cs.set_high();
+
+        // cs.set_low();
+        // let mut something = [0x9E, 0x83, 0x41];
+        // //let data = spi.write(&[0x9E, 0x84, 0x20]);
+        // let  data = spi.transfer(&mut something);
+        // match data {
+        //         Ok(v) => iprintln!(stim, "working with version: {:?}", v),
+        //         Err(e) => iprintln!(stim, "error parsing header: {:?}", e),
+        // }
+        // cs.set_high();
+        /*
+        cs.set_low();
+        let mut something = [0x9E, 0x02, 0x60];
+        let  data = spi.transfer(&mut something);
+        match data {
+                Ok(v) => iprintln!(stim, "working with version: {:?}", v),
+                Err(e) => iprintln!(stim, "error parsing header: {:?}", e),
+        }
+        cs.set_high();
+
+        cs.set_low();
+        let mut something = [0x9E, 0x01];
+        let  data = spi.transfer(&mut something);
+        match data {
+                Ok(v) => iprintln!(stim, "working with version: {:?}", v),
+                Err(e) => iprintln!(stim, "error parsing header: {:?}", e),
+        }
+        cs.set_high();
+
+        cs.set_low();
+        let mut something = [0x9F, 0x01];
+        let  data = spi.transfer(&mut something);
+        //let data2 = spi.read();
+        match data {
+                Ok(v) => iprintln!(stim, "working with version: {:?}", v),
+                Err(e) => iprintln!(stim, "error parsing header: {:?}", e),
+        }
+        //println!(stim, "{:?}", data2);
+        cs.set_high();
+
+        cs.set_low();
+        let mut something = [0x9E, 0x02];
+        let  data = spi.transfer(&mut something);
+        match data {
+                Ok(v) => iprintln!(stim, "working with version: {:?}", v),
+                Err(e) => iprintln!(stim, "error parsing header: {:?}", e),
+        }
+        cs.set_high();
+
+        cs.set_low();
+        let mut something = [0x9F, 0x02];
+        let  data = spi.transfer(&mut something);
+        //let data2 = spi.read();
+        match data {
+                Ok(v) => iprintln!(stim, "working with version: {:?}", v),
+                Err(e) => iprintln!(stim, "error parsing header: {:?}", e),
+        }
+        //println!(stim, "{:?}", data2);
+        cs.set_high();
+        */
+        // asm::bkpt();
+        // cs.set_low();
+        // for _ in 1..10000 {
+        //     asm::nop();
+        // }
+        // let mut something = [0x9F, 0x01];
+        // //let mut something = [0x9F, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x08];
+        
+        // //let mut something = [0x9F, 0x02];
+        // //let data = spi.write(&[0x9E, 0x84, 0x20]);
+        // let  data = spi.transfer(&mut something);
+        // let mut number: &[u8] = &[0x1];
+        // match data {
+        //         Ok(v) => {
+        //             iprintln!(stim, "working with version: {:?}", v);
+        //             number = v;
+        //         },
+        //         Err(e) => iprintln!(stim, "error parsing header: {:?}", e),
+        // }
+        // cs.set_high();
+        
+        // asm::bkpt();
+        // //cs.set_low();
+        // // iprintln!(stim, "{:?}", number);
+        // // iprintln!(stim, "{:?}", number[1] & 0x5C);
+        // cs.set_low();
+        // for _ in 1..10000 {
+        //     asm::nop();
+        // }
+        // spi.write(&[0x9E, 0x02, 0x41]);
+        // // let mut something = [0x9E];
+        // // //let mut something = [0x9F, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x08];
+        
+        // // //let mut something = [0x9F, 0x02];
+        // // //let data = spi.write(&[0x9E, 0x84, 0x20]);
+        // // let  data = spi.transfer(&mut something);
+        // // match data {
+        // //         Ok(v) => iprintln!(stim, "working with version: {:?}", v),
+        // //         Err(e) => iprintln!(stim, "error parsing header: {:?}", e),
+        // // }
+        // // let mut something = [0x02];
+        // // //let mut something = [0x9F, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x08];
+        
+        // // //let mut something = [0x9F, 0x02];
+        // // //let data = spi.write(&[0x9E, 0x84, 0x20]);
+        // // let  data = spi.transfer(&mut something);
+        // // match data {
+        // //         Ok(v) => iprintln!(stim, "working with version: {:?}", v),
+        // //         Err(e) => iprintln!(stim, "error parsing header: {:?}", e),
+        // // }
+        // // let mut something = [0x40];
+        // // //let mut something = [0x9F, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x08];
+        
+        // // //let mut something = [0x9F, 0x02];
+        // // //let data = spi.write(&[0x9E, 0x84, 0x20]);
+        // // let  data = spi.transfer(&mut something);
+        // // match data {
+        // //         Ok(v) => iprintln!(stim, "working with version: {:?}", v),
+        // //         Err(e) => iprintln!(stim, "error parsing header: {:?}", e),
+        // // }
+        // cs.set_high();
+
+        // asm::bkpt();
+        // cs.set_low();
+        // for _ in 1..10000 {
+        //     asm::nop();
+        // }
+        // //let mut something = [0x9F, 0x05];
+        // let mut something = [0x9F, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x08];
+        
+        // //let mut something = [0x9F, 0x02];
+        // //let data = spi.write(&[0x9E, 0x84, 0x20]);
+        // let  data = spi.transfer(&mut something);
+        // //let mut number: &[u8] = &[0x1];
+        // match data {
+        //         Ok(v) => {
+        //             iprintln!(stim, "working with version: {:?}", v);
+        //             //number = v;
+        //         },
+        //         Err(e) => iprintln!(stim, "error parsing header: {:?}", e),
+        // }
+        // cs.set_high();
+                //     let sr = device.SPI3.sr.read();
+        /*
+        let mut done = false;
+        while !done {
+            let sr = device.SPI3.sr.read();
+            if sr.rxne().bit_is_set() {
+                done = true;
+            }
+        }
+        let data = spi.read();
+        */
+        
+        // let data = spi.write(&[0x04]);
+        // match data {
+        //         Ok(v) => iprintln!(stim, "working with version: {:?}", v),
+        //         Err(e) => iprintln!(stim, "error parsing header: {:?}", e),
+        // }
+        // let data = spi.write(&[0x20]);
+        // match data {
+        //         Ok(v) => iprintln!(stim, "working with version: {:?}", v),
+        //         Err(e) => iprintln!(stim, "error parsing header: {:?}", e),
+        // }
+        
+        // cs.set_low();
+        
+        // let data = spi.write(&[0x9E, 0x06, 0x00]);
+        // match data {
+        //         Ok(v) => iprintln!(stim, "working with version: {:?}", v),
+        //         Err(e) => iprintln!(stim, "error parsing header: {:?}", e),
+        // }
+        // cs.set_high();
+
+        // cs.set_low();
+        
+        // let data = spi.write(&[0x9E, 0x08, 0x00]);
+        // match data {
+        //         Ok(v) => iprintln!(stim, "working with version: {:?}", v),
+        //         Err(e) => iprintln!(stim, "error parsing header: {:?}", e),
+        // }
+        // cs.set_high();
+
+        // cs.set_low();
+        
+        // let data = spi.write(&[0x9E, 0x08, 0x00]);
+        // match data {
+        //         Ok(v) => iprintln!(stim, "working with version: {:?}", v),
+        //         Err(e) => iprintln!(stim, "error parsing header: {:?}", e),
+        // }
+        // cs.set_high();
+        /*
         let gpiob = device.GPIOB.split();
         let lrck = gpiob.pb12.into_alternate_af5();
         let slck = gpiob.pb13.into_alternate_af5();
@@ -49,24 +357,7 @@ const APP: () = {
         let mut button5 = gpiob.pb5.into_pull_up_input();
         
 
-        let gpioc = device.GPIOC.split();
-        let mclk = gpioc.pc6.into_alternate_af5();
-        device.SPI3.i2scfgr.modify(|_, w| {
-            w.i2se().disabled()
-        });
-
-        device.SPI3.i2scfgr.modify(|_, w| {
-            w.i2smod().i2smode()
-            .i2sstd().msb()
-            .datlen().twenty_four_bit()
-        });
-
-        device.SPI3.i2spr.modify(|_, w|{
-            w.mckoe().enabled()
-        });
-        device.SPI3.i2scfgr.modify(|_, w| {
-            w.i2se().enabled()
-        });
+       
         // A full cycle, 16-bit, 2's complement Sine wave lookup table
         let sine: [u16; 256] = [
         0x0000, 0x0324, 0x0647, 0x096a, 0x0c8b, 0x0fab, 0x12c8, 0x15e2, 
@@ -102,18 +393,20 @@ const APP: () = {
         0xcf05, 0xd1ef, 0xd4e1, 0xd7da, 0xdad8, 0xdddd, 0xe0e7, 0xe3f5, 
         0xe708, 0xea1e, 0xed38, 0xf055, 0xf375, 0xf696, 0xf9b9, 0xfcdc,
         ];
-        loop {
-            let sr = device.SPI3.sr.read();
-            let byte: u32 = 255;
-            if sr.ovr().bit_is_set() {
-                iprintln!(stim, "Ovr error!");
-            } else if sr.txe().bit_is_set() {
-                device.SPI3.dr.write(|w| unsafe{ w.bits(byte)});
-            } else {
-                iprintln!(stim, "Would block!");
-            }
+        */
+        // loop {
+        //     let sr = device.SPI3.sr.read();
+        //     let byte: u32 = 255;
+        //     if sr.ovr().bit_is_set() {
+        //         iprintln!(stim, "Ovr error!");
+        //     } else if sr.txe().bit_is_set() {
+        //         device.SPI3.dr.write(|w| unsafe{ w.bits(0x)});
+        //         device.SPI3.dr.write(|w| unsafe{ w.bits(byte)});
+        //     } else {
+        //         iprintln!(stim, "Would block!");
+        //     }
 
-        }
+        // }
     }
     
     #[idle]
