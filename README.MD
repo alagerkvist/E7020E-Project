@@ -70,12 +70,21 @@ The purpose of this course is to get a understanding of embedded system and appl
 
 * MCUs adc can only read from one potentiometer
 * LCD screen has no library yet, so it's a pain in the a** to write to it
-* As of now, the codec is behaving strange when writing to it, possible reason to this can be impedance mismatch 
+* As of now, the codec is inconsistent when writing to it, possible reason to this can be impedance mismatch or wrongfully clock generation 
 * PCB layout for regulation is not right implemented
 * Footprint for mini-usb type B should be the other way around (no possibility to mount it on the PCB as of now)
 * Codec is in master mode, and should be in slave mode (can be fixed with a pull down resistor instead of a pull up resistor)
 * Layout for the potentiometer is too close, needs to seperate more
 * Footprint for RCA connector needs to be bigger in their NPTH hole 
+
+## Future work
+
+* Implement ADC so it can be read from three potentiometers
+* Library for LCD
+* Successfully send data to codec
+* Store data from codec into ram
+* Sound processing
+* Store/read data on USB 
 
 ## Acknowledgments
 PhD Student Cristina Paniagua [Link to profile](https://www.ltu.se/staff/c/cripan-1.167417?l=en)
