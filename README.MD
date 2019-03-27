@@ -83,7 +83,7 @@ The purpose of this course is to get a understanding of embedded system and appl
 * Library for LCD
 * Successfully send data to codec
 * Store data from codec into ram
-* Sound processing
+* Sound processing (filter or convolution implementation)
 * Store/read data on USB 
 
 ## Acknowledgments
