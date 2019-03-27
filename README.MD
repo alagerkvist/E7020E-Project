@@ -6,31 +6,22 @@ The purpose of this course is to get a understanding of embedded system and appl
 
 ## Getting Started
 
-TBD
+* Start by installing Rust for embedded system, follow [this](https://rust-embedded.github.io/book/intro/install.html) guide. 
+* Install OpenOCD (version 0.10.0)
+* Install arm-none-eabi-gdb (version 8.2.1)
+* We are using as of 2019-03-27: rustc 1.34.0-nightly (8a57831a4 2019-02-02)
 
-### Prerequisites
-
-TBD
-```
-TBD
-```
-
-### Installing
-
-TBD
-
-```
-TBD
-```
+### Building software
+* Clone the repo ``` git clone https://github.com/alagerkvist/E7020E-Project.git ```
+* If you would like to use the latest main program run ``` cargo build --release ```
+* For examples, run ``` cargo build --example NAME_OF_RS_FILE (codec) ```
 
 ## Deployment
 
-rustc 1.34.0-nightly (8a57831a4 2019-02-02)
-## Built With
-
-* Cargo
-* OpenOCD
-* arm-none-eabi-gdb
+* Create FIFO file ``` mkfifo /tmp/itm.log ```
+* Start your ITM trace ``` itmdump -f /tmp/itm.log -F ```
+* Start OpenOCD ``` openocd -f openocd.cfg ```
+* Start gdb ``` arm-none-eabi-gdb target/thumbv7em-none-eabinhf/debug/examples/NAME_OF_RS_FILE -x openocd.gdb ```
 
 ## Authors
 
@@ -66,6 +57,17 @@ rustc 1.34.0-nightly (8a57831a4 2019-02-02)
 * **Anders Lagerkvist** - *USB implementation*
 * **Gustav Larsson** - *Real time signal processing*
 
+## Known issues and limitation
+
+* PCB layout for regulation is not right implemented
+* Footprint for mini-usb type B should be the other way around (no possibility to mount it on the PCB as of now)
+* Codec is in master mode, and should be in slave mode (can be fixed with a pull down resistor instead of a pull up resistor)
+* Layout for the potentiometer is too close, needs to seperate more
+* Footprint for RCA connector needs to be bigger in their NPTH hole 
+
+
+
 ## Acknowledgments
 PhD Student Cristina Paniagua [Link to profile](https://www.ltu.se/staff/c/cripan-1.167417?l=en)
+
 Professor Per Lindgren [Link to profile](https://www.ltu.se/staff/p/pln-1.11258?l=en)
