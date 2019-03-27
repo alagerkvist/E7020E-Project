@@ -219,7 +219,7 @@ const APP: () = {
             
         for index in 4000-(resources.BUF.len() as u32)..4000{
             let mut i = 0;
-            output[index] = resources.BUF[i] as usize;
+            output[index as usize] = resources.BUF[i];
             i += 1;
         }
 
@@ -239,8 +239,9 @@ const APP: () = {
         asm::bkpt();
         iprintln!(stim, "---------data-------");
         let index:u32;
-        for index in resources.BUF.iter().enumerate() {
-            iprintln!(stim, "{:?}", *resources.BUF[index]);
+        for index in 0..resources.BUF.len() {
+            let mut a = resources.BUF[index];
+            iprintln!(stim, "{:?}", a);
             for _ in 0..100{
                 asm::nop();
             }  
