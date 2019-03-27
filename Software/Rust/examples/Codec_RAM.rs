@@ -211,10 +211,12 @@ const APP: () = {
         let stim = &mut resources.ITM.stim[0];
         iprintln!(stim, "EXTI3");
     }
-    #[interrupt(resources = [ITM, EXTI, BUF])]
+    #[interrupt(resources = [ITM, EXTI, I2S, BUF])]
+        //add a delay on BUF -> output send to codec.
     fn EXTI4(){
         let stim = &mut resources.ITM.stim[0];
         iprintln!(stim, "Sending Data"); 
+        // delay
         let mut output: [u32; 4000] = [0; 4000];
             
         for index in 4000-(resources.BUF.len() as u32)..4000{
@@ -222,6 +224,17 @@ const APP: () = {
             output[index as usize] = resources.BUF[i];
             i += 1;
         }
+        // data to send to codec
+         asm::bkpt();
+        // loop {
+        //     for _ in 0..10 {
+        //         for i in 0..4000 {
+        //             while !resources.I2S.sr.read().txe().bit_is_set() {}
+        //             resources.I2S.dr.write(|w| unsafe{ w.bits(output[i])});
+        //         }
+        //     }
+        //     asm::bkpt();
+        // }
 
         resources.EXTI.pr.modify(|_, w| w.pr5().set_bit()); 
     }
