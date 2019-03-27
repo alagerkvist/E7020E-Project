@@ -9,7 +9,7 @@ use crate::hal::prelude::*;
 use cortex_m::{asm, iprintln};
 use hal::stm32::ITM;
 use hal::stm32::EXTI;
-// use hal::stm32::SPI2;
+use hal::stm32::SPI2;
 use hal::spi::{Spi, Mode, Phase, Polarity};
 use rtfm::{app};
 
@@ -18,7 +18,8 @@ const APP: () = {
     
     static mut ITM: ITM = ();
     static mut EXTI: EXTI = (); 
-    // static mut I2S: SPI2 = ();
+    static mut I2S: SPI2 = ();
+    static mut BUF:[u32; 1000] = [0u32;1000]; 
     
     #[init]
     fn init() {
@@ -178,8 +179,8 @@ const APP: () = {
 
         ITM = core.ITM;
         EXTI = device.EXTI;
-        // I2S = device.SPI2;
-
+        I2S = device.SPI2;
+        
         
     }
     
@@ -190,81 +191,63 @@ const APP: () = {
         }
     }
 
-//     #[interrupt(resources = [ITM, EXTI])]
-//     fn EXTI0(){
-//         let stim = &mut resources.ITM.stim[0];
-//         iprintln!(stim, "EXTI0");
-//     }
-    // #[interrupt(resources = [ITM, EXTI, buf])]
-    // fn EXTI1(){
-    //     let stim = &mut resources.ITM.stim[0];
-    //     iprintln!(stim, "EXTI1");
-
-    //         let mut delay: u32 = resources.buf.len() * 4;
-    //         let mut output: [u32; delay] = [0; delay];
+    #[interrupt(resources = [ITM])]
+    fn EXTI0(){
+        let stim = &mut resources.ITM.stim[0];
+        iprintln!(stim, "EXTI0");
+    }
+    #[interrupt(resources = [ITM])]
+    fn EXTI1(){
+        let stim = &mut resources.ITM.stim[0];
+        iprintln!(stim, "EXTI1");
+     }
+    #[interrupt(resources = [ITM])]
+    fn EXTI2(){
+        let stim = &mut resources.ITM.stim[0];
+        iprintln!(stim, "EXTI2");
+    }
+    #[interrupt(resources = [ITM])]
+    fn EXTI3(){
+        let stim = &mut resources.ITM.stim[0];
+        iprintln!(stim, "EXTI3");
+    }
+    #[interrupt(resources = [ITM, EXTI, BUF])]
+    fn EXTI4(){
+        let stim = &mut resources.ITM.stim[0];
+        iprintln!(stim, "Sending Data"); 
+        let mut output: [u32; 4000] = [0; 4000];
             
-    //         for index in delay-resources.buf.len()..delay{
-    //             let mut i: u32 = 0;
-    //             output[index] = buf[i];
-    //             i += 1;
-    //         }
+        for index in 4000-(resources.BUF.len() as u32)..4000{
+            let mut i = 0;
+            output[index] = resources.BUF[i] as usize;
+            i += 1;
+        }
 
+        resources.EXTI.pr.modify(|_, w| w.pr5().set_bit()); 
+    }
 
-    //  }
-//     #[interrupt(resources = [ITM])]
-//     fn EXTI2(){
-//         let stim = &mut resources.ITM.stim[0];
-//         iprintln!(stim, "EXTI2");
-//     }
-//     #[interrupt(resources = [ITM])]
-//     fn EXTI3(){
-//         let stim = &mut resources.ITM.stim[0];
-//         iprintln!(stim, "EXTI3");
-//     }
-//     #[interrupt(resources = [ITM])]
-//     fn EXTI4(){
-//         let stim = &mut resources.ITM.stim[0];
-//         iprintln!(stim, "EXTI4");
-//     }
-
-//    #[interrupt(resources = [ITM, I2S])]
-//     fn EXTI9_5(){
-//         let stim = &mut resources.ITM.stim[0];
-//         iprintln!(stim, "Reading Data");
-//         //read data from MISO
-//         let mut buf: [u32; 1000] = [0;1000];
-//         let mut index = 0;            
-//         for index in 0..buf.len() {
-//             asm::brkp();
-//             while !resources.I2S.sr.read().rxne().bit_is_set(){}
-//             let byte = resources.I2S.dr.read().bits();
-//             buf[index] = byte;
-//             let sr = resources.I2S.sr.read();
-//             if sr.ovr().bit_is_set() {
-//                 //iprintln!(stim, "Ovr error!");
-//             } else if sr.udr().bit_is_set() {
-//                 //iprintln!(stim, "udr error!");
-//             } else if sr.fre().bit_is_set() {
-//                 //iprintln!(stim, "fre error!");
-//             } else if sr.rxne().bit_is_set() {
-//                 let byte = resources.I2S.dr.read().bits();
-//                 buf[index] = byte;
-//             } else {
-//                 iprintln!(stim, "Would block!");
-//             }
-//             index += 1;
-//         }
-//         asm::bkpt();
-
+   #[interrupt(resources = [ITM, EXTI, I2S, BUF])]
+    fn EXTI9_5(){
+        let stim = &mut resources.ITM.stim[0];
+        iprintln!(stim, "Reading Data");
+        //read data from MISO            
+        for index in 0..resources.BUF.len() {
+            while !resources.I2S.sr.read().rxne().bit_is_set(){}
+            let byte = resources.I2S.dr.read().bits();
+            resources.BUF[index] = byte;
+        }
+        asm::bkpt();
+        iprintln!(stim, "---------data-------");
+        let index:u32;
+        for index in resources.BUF.iter().enumerate() {
+            iprintln!(stim, "{:?}", *resources.BUF[index]);
+            for _ in 0..100{
+                asm::nop();
+            }  
         
-//         iprintln!(stim, "---------data-------");
-//             iprintln!(stim, "{:?}", buf[index]);
-//             for _ in 0..100{
-//                 asm::nop();
-//             }  
-        
-        // resources.EXTI.pr.modify(|_, w| w.pr5().set_bit());      
-//     }
+        }
+        resources.EXTI.pr.modify(|_, w| w.pr5().set_bit());      
+    }
 };
 
 
