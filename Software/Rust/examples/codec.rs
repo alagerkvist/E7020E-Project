@@ -439,7 +439,7 @@ const APP: () = {
             for _ in 0..10 {
                 for i in 0..10000 {
                     while !device.SPI2.sr.read().txe().bit_is_set() {}
-                    device.SPI2.dr.write(|w| unsafe{ w.bits(arr[i])});
+                    device.SPI2.dr.write(|w| unsafe{ w.bits(sine[i])});
                 }
             }
             asm::bkpt();
