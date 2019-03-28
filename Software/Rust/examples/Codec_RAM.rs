@@ -160,7 +160,7 @@ const APP: () = {
 
         // set digital loopback
         cs.set_low();
-        let mut something = [0x9E, 0x04, 0x00];
+        let mut something = [0x9E, 0x04, 0x09];
         let  data = spi.transfer(&mut something);
         match data {
                 Ok(v) => iprintln!(stim, "working with version: {:?}", v),
@@ -215,6 +215,16 @@ const APP: () = {
     #[interrupt(resources = [ITM, EXTI, I2S, BUF])]
         //add a delay on BUF -> output send to codec.
     fn EXTI4(){
+        resources.I2S.i2scfgr.modify(|_, w| {
+            w.i2se().disabled()
+        });
+
+        resources.I2S.i2scfgr.modify(|_, w| {
+            w.i2scfg().master_rx()    
+        });
+        resources.I2S.i2scfgr.modify(|_, w| {
+            w.i2se().enabled()
+        });
         let stim = &mut resources.ITM.stim[0];
         iprintln!(stim, "Reading Data");
         //read data from MISO            
@@ -240,6 +250,18 @@ const APP: () = {
 
    #[interrupt(resources = [ITM, EXTI, I2S, BUF])]
     fn EXTI9_5(){
+
+         resources.I2S.i2scfgr.modify(|_, w| {
+            w.i2se().disabled()
+        });
+
+        resources.I2S.i2scfgr.modify(|_, w| {
+            w.i2scfg().master_tx()    
+        });
+        resources.I2S.i2scfgr.modify(|_, w| {
+            w.i2se().enabled()
+        });
+
            let stim = &mut resources.ITM.stim[0];
         iprintln!(stim, "Sending Data"); 
         // delay
@@ -259,6 +281,7 @@ const APP: () = {
                     resources.I2S.dr.write(|w| unsafe{ w.bits(output[i])});
                 }
             }
+            iprintln!(stim, "Finnish Sending Data"); 
             asm::bkpt();
         }
 
