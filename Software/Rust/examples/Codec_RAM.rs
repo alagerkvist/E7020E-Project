@@ -11,6 +11,7 @@ use hal::stm32::ITM;
 use hal::stm32::EXTI;
 use hal::stm32::SPI2;
 use hal::spi::{Spi, Mode, Phase, Polarity};
+use hal::gpio::ExtiPin;
 use rtfm::{app};
 
 #[app(device = hal::stm32)]
@@ -59,8 +60,7 @@ const APP: () = {
             w.mco2().sysclk().mco2pre().div4() 
         });
 
-        device.SYSCFG.exticr2.modify(|_, w| unsafe { w.exti5().bits(0b0001) });
-        // button
+        // buttons
         let gpiob = device.GPIOB.split();
         let mut button4 = gpiob.pb4.into_pull_up_input();
         let mut button5 = gpiob.pb5.into_pull_up_input();
@@ -158,7 +158,7 @@ const APP: () = {
 
         // set digital loopback
         cs.set_low();
-        let mut something = [0x9E, 0x04, 0x20];
+        let mut something = [0x9E, 0x04, 0x00];
         let  data = spi.transfer(&mut something);
         match data {
                 Ok(v) => iprintln!(stim, "working with version: {:?}", v),
@@ -183,7 +183,6 @@ const APP: () = {
         
         
     }
-    
     #[idle]
     fn idle() -> ! {
         loop {
@@ -215,33 +214,6 @@ const APP: () = {
         //add a delay on BUF -> output send to codec.
     fn EXTI4(){
         let stim = &mut resources.ITM.stim[0];
-        iprintln!(stim, "Sending Data"); 
-        // delay
-        let mut output: [u32; 4000] = [0; 4000];
-            
-        for index in 4000-(resources.BUF.len() as u32)..4000{
-            let mut i = 0;
-            output[index as usize] = resources.BUF[i];
-            i += 1;
-        }
-        // data to send to codec
-         asm::bkpt();
-        // loop {
-        //     for _ in 0..10 {
-        //         for i in 0..4000 {
-        //             while !resources.I2S.sr.read().txe().bit_is_set() {}
-        //             resources.I2S.dr.write(|w| unsafe{ w.bits(output[i])});
-        //         }
-        //     }
-        //     asm::bkpt();
-        // }
-
-        resources.EXTI.pr.modify(|_, w| w.pr5().set_bit()); 
-    }
-
-   #[interrupt(resources = [ITM, EXTI, I2S, BUF])]
-    fn EXTI9_5(){
-        let stim = &mut resources.ITM.stim[0];
         iprintln!(stim, "Reading Data");
         //read data from MISO            
         for index in 0..resources.BUF.len() {
@@ -262,6 +234,35 @@ const APP: () = {
         }
         resources.EXTI.pr.modify(|_, w| w.pr5().set_bit());      
     }
+    
+
+   #[interrupt(resources = [ITM, EXTI, I2S, BUF])]
+    fn EXTI9_5(){
+           let stim = &mut resources.ITM.stim[0];
+        iprintln!(stim, "Sending Data"); 
+        // delay
+        let mut output: [u32; 4000] = [0; 4000];
+            
+        for index in 4000-(resources.BUF.len() as u32)..4000{
+            let mut i = 0;
+            output[index as usize] = resources.BUF[i];
+            i += 1;
+        }
+        // data to send to codec
+         asm::bkpt();
+        loop {
+            for _ in 0..10 {
+                for i in 0..4000 {
+                    while !resources.I2S.sr.read().txe().bit_is_set() {}
+                    resources.I2S.dr.write(|w| unsafe{ w.bits(output[i])});
+                }
+            }
+            asm::bkpt();
+        }
+
+        resources.EXTI.pr.modify(|_, w| w.pr5().set_bit()); 
+    }
+        
 };
 
 
