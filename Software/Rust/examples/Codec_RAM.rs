@@ -26,6 +26,8 @@ const APP: () = {
     fn init() {
         let stim = &mut core.ITM.stim[0];
         iprintln!(stim, "hello codec");
+        device.RCC.ahb1enr.modify(|_, w| w.gpiocen().set_bit());
+        device.RCC.apb2enr.modify(|_, w| w.syscfgen().set_bit());
         
         device.RCC.cr.modify(|_,w| {
             w.plli2son().on()
