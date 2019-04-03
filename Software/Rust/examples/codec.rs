@@ -90,7 +90,7 @@ const APP: () = {
 
         device.SPI2.i2scfgr.modify(|_, w| {
             w.i2smod().i2smode()
-            .i2scfg().master_tx()
+            .i2scfg().slave_rx()
             .i2sstd().msb()
             .datlen().twenty_four_bit()
             .chlen().thirty_two_bit()
@@ -115,7 +115,7 @@ const APP: () = {
 
         device.I2S2EXT.i2scfgr.modify(|_, w| {
             w.i2smod().i2smode()
-            .i2scfg().slave_rx()
+            .i2scfg().master_tx()
             .i2sstd().msb()
             .datlen().twenty_four_bit()
             .chlen().thirty_two_bit()
@@ -467,7 +467,7 @@ const APP: () = {
                 for i in 0..nSamples {
                     let low = ((sine[i] & 0xFF) << 8) as u16;
                     let high = ((sine[i] & 0xFFFF00) >> 8) as u16;
-                    
+                    /*
                     while !device.SPI2.sr.read().txe().bit_is_set() {}
                     //device.SPI2.dr.write(|w| unsafe { w.dr().bits(0xAAAA)});
                     device.SPI2.dr.write(|w| unsafe { w.dr().bits(high)});
@@ -475,6 +475,11 @@ const APP: () = {
                     //device.SPI2.dr.write(|w| unsafe { w.dr().bits(0xBA00)});
                     
                     device.SPI2.dr.write(|w| unsafe { w.dr().bits(low)});
+                    */
+                    while !device.I2S2EXT.sr.read().txe().bit_is_set() {}
+                    device.I2S2EXT.dr.write(|w| unsafe { w.dr().bits(high)});
+                    while !device.I2S2EXT.sr.read().txe().bit_is_set() {}
+                    device.I2S2EXT.dr.write(|w| unsafe { w.dr().bits(low)});
                 }
             }
             asm::bkpt();
