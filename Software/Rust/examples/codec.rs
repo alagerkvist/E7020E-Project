@@ -83,6 +83,21 @@ const APP: () = {
         let _slck = gpiob.pb13.into_alternate_af5();
         let _sdin = gpiob.pb14.into_alternate_af6();
         let _sdout = gpiob.pb15.into_alternate_af5();
+
+        device.I2S2EXT.i2spr.modify(|_, w| {
+            unsafe{
+                w.i2sdiv().bits(0b10)
+            }
+        });
+
+        device.I2S2EXT.i2scfgr.modify(|_, w| {
+            w.i2smod().i2smode()
+            .i2scfg().master_tx()
+            .i2sstd().msb()
+            .datlen().twenty_four_bit()
+            .chlen().thirty_two_bit()
+            .ckpol().idle_high()
+        });
         
         device.SPI2.i2scfgr.modify(|_, w| {
             w.i2se().disabled()
@@ -107,20 +122,7 @@ const APP: () = {
             w.i2se().enabled()
         });
         
-        device.I2S2EXT.i2spr.modify(|_, w| {
-            unsafe{
-                w.i2sdiv().bits(0b10)
-            }
-        });
-
-        device.I2S2EXT.i2scfgr.modify(|_, w| {
-            w.i2smod().i2smode()
-            .i2scfg().master_tx()
-            .i2sstd().msb()
-            .datlen().twenty_four_bit()
-            .chlen().thirty_two_bit()
-            .ckpol().idle_high()
-        });
+        
         cs.set_high();
         cs.set_low();
         cs.set_high();
