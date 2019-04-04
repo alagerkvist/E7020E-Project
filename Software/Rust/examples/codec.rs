@@ -91,12 +91,20 @@ const APP: () = {
         });
 
         device.I2S2EXT.i2scfgr.modify(|_, w| {
+            w.i2se().disabled()
+        });
+
+        device.I2S2EXT.i2scfgr.modify(|_, w| {
             w.i2smod().i2smode()
             .i2scfg().master_tx()
             .i2sstd().msb()
             .datlen().twenty_four_bit()
             .chlen().thirty_two_bit()
             .ckpol().idle_high()
+        });
+
+        device.I2S2EXT.i2scfgr.modify(|_, w| {
+            w.i2se().enabled()
         });
         
         device.SPI2.i2scfgr.modify(|_, w| {
