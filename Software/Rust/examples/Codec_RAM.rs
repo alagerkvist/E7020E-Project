@@ -10,6 +10,7 @@ use cortex_m::{asm, iprintln};
 use hal::stm32::ITM;
 use hal::stm32::EXTI;
 use hal::stm32::SPI2;
+use hal::stm32::I2S2EXT;
 use hal::spi::{Spi, Mode, Phase, Polarity};
 use hal::gpio::ExtiPin;
 use rtfm::{app};
@@ -20,8 +21,9 @@ const APP: () = {
     static mut ITM: ITM = ();
     static mut EXTI: EXTI = (); 
     static mut I2S: SPI2 = ();
-    static mut BUF:[u32; 1000] = [0u32;1000]; 
-    
+    static mut BUF:[u16; 30000] = [0u16;30000]; 
+    static mut I2SEXT: I2S2EXT = ();
+
     #[init]
     fn init() {
         let stim = &mut core.ITM.stim[0];
@@ -110,7 +112,30 @@ const APP: () = {
         let _slck = gpiob.pb13.into_alternate_af5();
         let _sdin = gpiob.pb14.into_alternate_af6();
         let _sdout = gpiob.pb15.into_alternate_af5();
-            
+
+        device.I2S2EXT.i2spr.modify(|_, w| {
+            unsafe{
+                w.i2sdiv().bits(0b10)
+            }
+        });
+
+        device.I2S2EXT.i2scfgr.modify(|_, w| {
+            w.i2se().disabled()
+        });
+
+        device.I2S2EXT.i2scfgr.modify(|_, w| {
+            w.i2smod().i2smode()
+            .i2scfg().master_tx()
+            .i2sstd().philips()
+            .datlen().twenty_four_bit()
+            .chlen().thirty_two_bit()
+            .ckpol().idle_high()
+        });
+
+        device.I2S2EXT.i2scfgr.modify(|_, w| {
+            w.i2se().enabled()
+        });
+
         device.SPI2.i2scfgr.modify(|_, w| {
             w.i2se().disabled()
         });
@@ -118,7 +143,7 @@ const APP: () = {
         device.SPI2.i2scfgr.modify(|_, w| {
             w.i2smod().i2smode()
             .i2scfg().master_rx()
-            .i2sstd().msb()
+            .i2sstd().philips()
             .datlen().twenty_four_bit()
             .chlen().thirty_two_bit()
             .ckpol().idle_high()
@@ -182,7 +207,7 @@ const APP: () = {
         ITM = core.ITM;
         EXTI = device.EXTI;
         I2S = device.SPI2;
-        
+        I2SEXT = device.I2S2EXT;
         
     }
     #[idle]
@@ -215,30 +240,29 @@ const APP: () = {
     #[interrupt(resources = [ITM, EXTI, I2S, BUF])]
         //add a delay on BUF -> output send to codec.
     fn EXTI4(){
-        resources.I2S.i2scfgr.modify(|_, w| {
-            w.i2se().disabled()
-        });
+        // resources.I2S.i2scfgr.modify(|_, w| {
+        //     w.i2se().disabled()
+        // });
 
-        resources.I2S.i2scfgr.modify(|_, w| {
-            w.i2scfg().master_rx()    
-        });
-        resources.I2S.i2scfgr.modify(|_, w| {
-            w.i2se().enabled()
-        });
+        // resources.I2S.i2scfgr.modify(|_, w| {
+        //     w.i2scfg().master_rx()    
+        // });
+        // resources.I2S.i2scfgr.modify(|_, w| {
+        //     w.i2se().enabled()
+        // });
         let stim = &mut resources.ITM.stim[0];
         iprintln!(stim, "Reading Data");
         //read data from MISO            
         for index in 0..resources.BUF.len() {
             while !resources.I2S.sr.read().rxne().bit_is_set(){}
-            let byte = resources.I2S.dr.read().bits();
+            let byte = resources.I2S.dr.read().dr().bits();
             resources.BUF[index] = byte;
         }
-        asm::bkpt();
         iprintln!(stim, "---------data-------");
-        let index:u32;
+        // let index:u32;
         for index in 0..resources.BUF.len() {
             let mut a = resources.BUF[index];
-            iprintln!(stim, "{:?}", a);
+            iprintln!(stim, "{:X?}", a);
             for _ in 0..100{
                 asm::nop();
             }  
@@ -248,42 +272,53 @@ const APP: () = {
     }
     
 
-   #[interrupt(resources = [ITM, EXTI, I2S, BUF])]
+   #[interrupt(resources = [ITM, EXTI, I2SEXT, BUF])]
     fn EXTI9_5(){
 
-         resources.I2S.i2scfgr.modify(|_, w| {
-            w.i2se().disabled()
-        });
+        //  resources.I2S.i2scfgr.modify(|_, w| {
+        //     w.i2se().disabled()
+        // });
 
-        resources.I2S.i2scfgr.modify(|_, w| {
-            w.i2scfg().master_tx()    
-        });
-        resources.I2S.i2scfgr.modify(|_, w| {
-            w.i2se().enabled()
-        });
+        // resources.I2S.i2scfgr.modify(|_, w| {
+        //     w.i2scfg().master_tx()    
+        // });
+        // resources.I2S.i2scfgr.modify(|_, w| {
+        //     w.i2se().enabled()
+        // });
 
            let stim = &mut resources.ITM.stim[0];
         iprintln!(stim, "Sending Data"); 
         // delay
-        let mut output: [u32; 4000] = [0; 4000];
+        let mut output: [u16; 4000] = [0; 4000];
             
-        for index in 4000-(resources.BUF.len() as u32)..4000{
-            let mut i = 0;
-            output[index as usize] = resources.BUF[i];
-            i += 1;
-        }
+        // for index in 4000-(resources.BUF.len() as u32)..4000{
+        //     let mut i = 0;
+        //     output[index as usize] = resources.BUF[i];
+        //     i += 1;
+        // }
+
         // data to send to codec
          asm::bkpt();
-        loop {
-            for _ in 0..10 {
-                for i in 0..4000 {
-                    while !resources.I2S.sr.read().txe().bit_is_set() {}
-                    resources.I2S.dr.write(|w| unsafe{ w.bits(output[i])});
+        for _ in 0..2 {
+            for j in 0..10 {
+                iprintln!(stim, "Sending Data {:?}", j); 
+                for i in 0..30000 {
+
+                    //let low = ((output[i] & 0xFF) << 8) as u16;
+                    //let high = ((output[i] & 0xFFFF00) >> 8) as u16;
+                    while !resources.I2SEXT.sr.read().txe().bit_is_set() {}
+                    let data = resources.BUF[i];
+                    //resources.I2SEXT.dr.write(|w| unsafe{ w.bits(output[i])});
+                    resources.I2SEXT.dr.write(|w| unsafe{ w.dr().bits(data)});
+                    // while !resources.I2SEXT.sr.read().txe().bit_is_set() {}
+                    // resources.I2SEXT.dr.write(|w| unsafe{ w.dr().bits(low)});
                 }
             }
             iprintln!(stim, "Finnish Sending Data"); 
             asm::bkpt();
         }
+
+        
 
         resources.EXTI.pr.modify(|_, w| w.pr5().set_bit()); 
     }

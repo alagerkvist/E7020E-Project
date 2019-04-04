@@ -113,7 +113,7 @@ const APP: () = {
 
         device.SPI2.i2scfgr.modify(|_, w| {
             w.i2smod().i2smode()
-            .i2scfg().slave_rx()
+            .i2scfg().master_rx()
             .i2sstd().msb()
             .datlen().twenty_four_bit()
             .chlen().thirty_two_bit()
@@ -137,7 +137,7 @@ const APP: () = {
 
 
         cs.set_low();
-        let mut something = [0x9E, 0x04, 0x29];
+        let mut something = [0x9E, 0x04, 0x09];
         let  data = spi.transfer(&mut something);
         match data {
                 Ok(v) => iprintln!(stim, "working with version: {:?}", v),
@@ -474,9 +474,24 @@ const APP: () = {
         asm::bkpt();
         loop {
             for _ in 0..10 {
+                for i in 0..8388608 {
+                    let low = ((i & 0xFF) << 8) as u16;
+                    let high = ((i & 0xFFFF00) >> 8) as u16;
+                    while !device.SPI2.sr.read().txe().bit_is_set() {}
+                    device.I2S2EXT.dr.write(|w| unsafe { w.dr().bits(high)});
+                    while !device.SPI2.sr.read().txe().bit_is_set() {}
+                    device.I2S2EXT.dr.write(|w| unsafe { w.dr().bits(low)});
+                    
+                }
+                asm::bkpt();
+            }
+        }
+
+        loop {
+            for _ in 0..10 {
                 for i in 0..nSamples {
-                    let low = ((sine[i] & 0xFF) << 8) as u16;
-                    let high = ((sine[i] & 0xFFFF00) >> 8) as u16;
+                    //let low = ((sine[i] & 0xFF) << 8) as u16;
+                    //let high = ((sine[i] & 0xFFFF00) >> 8) as u16;
                     /*
                     while !device.SPI2.sr.read().txe().bit_is_set() {}
                     //device.SPI2.dr.write(|w| unsafe { w.dr().bits(0xAAAA)});
@@ -487,9 +502,11 @@ const APP: () = {
                     device.SPI2.dr.write(|w| unsafe { w.dr().bits(low)});
                     */
                     while !device.I2S2EXT.sr.read().txe().bit_is_set() {}
-                    device.I2S2EXT.dr.write(|w| unsafe { w.dr().bits(high)});
+                    //device.I2S2EXT.dr.write(|w| unsafe { w.dr().bits(high)});
+                    device.I2S2EXT.dr.write(|w| unsafe { w.dr().bits(0x7FFF)});
                     while !device.I2S2EXT.sr.read().txe().bit_is_set() {}
-                    device.I2S2EXT.dr.write(|w| unsafe { w.dr().bits(low)});
+                    device.I2S2EXT.dr.write(|w| unsafe { w.dr().bits(0x01)});
+                    //device.I2S2EXT.dr.write(|w| unsafe { w.dr().bits(low)});
                 }
             }
             asm::bkpt();
