@@ -6,13 +6,12 @@
 
 extern crate panic_halt;
 extern crate sample;
-use cortex_m_rt::entry;
-use cortex_m_semihosting::hprintln;
+extern crate stm32f4xx_hal as hal;
+use cortex_m::{asm, iprintln};
+use rtfm::{app};
 
-use core::alloc::{Layout, GlobalAlloc};//System;
+use core::alloc::{Layout, GlobalAlloc};
 use core::ptr::null_mut;
-use cortex_m::asm;
-
 
 struct MyAllocator;
 
@@ -23,26 +22,34 @@ unsafe impl GlobalAlloc for MyAllocator {
 
 #[global_allocator]
 static A: MyAllocator = MyAllocator;
-use sample::{signal, Signal};
+use sample::{signal, Signal, I24, Sample};
 
-#[entry]
-fn main() -> ! {
-    let mut signal = signal::rate(4.0).const_hz(1.0).sine();
 
-    //hprintln!("{:?}", unsafe { sinf64(0.0) });//signal.next());
-    hprintln!("{:?}", signal.next());
-    //hprintln!("{:?}", signal.next());
-    //hprintln!("{:?}", signal.next());
-    //hprintln!("{:?}", signal.next());
-    //assert_eq!(signal.next(), [0.0]);
-    //assert_eq!(signal.next(), [1.0]);
-    //signal.next();
-    //assert_eq!(signal.next(), [-1.0]);
-    loop {}
-}
+#[app(device = hal::stm32)]
+const APP: () = {
+
+    #[init]
+    fn init() {
+        let stim = &mut core.ITM.stim[0];
+        iprintln!(stim, "hello codec");
+        let mut signal = signal::rate(4.0).const_hz(1.0).sine();
+        for _i in 0..4 {
+            let s = signal.next();
+            let t = I24::from_sample(s[0]);
+            iprintln!(stim, "{:?}", t);
+        }
+    }
+
+    #[idle]
+    fn idle() -> ! {
+        loop {
+            asm::wfi();
+        }
+    }
+};
 
 #[alloc_error_handler]
-fn on_oom(_layout: core::alloc::Layout) -> ! {
+fn on_oom(_layout: Layout) -> ! {
     asm::bkpt();
 
     loop {}

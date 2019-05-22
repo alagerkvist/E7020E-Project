@@ -24,7 +24,7 @@ heapless = "0.4.1"
 
 [dependencies.cortex-m-rtfm]
 version = "0.4.0"
-optional = true
+#optional = true
 
 [dependencies.cortex-m]
 version = "0.5.8"
@@ -42,13 +42,11 @@ optional = true
 git = "https://github.com/stm32-rs/stm32f4xx-hal.git"
 version = "0.5.0"
 features = ["stm32f413", "rt"]
-optional = true
 
 [features]
 pac = ["stm32f4"]
-hal = ["stm32f4xx-hal"]
-rtfm = ["cortex-m-rtfm"]
-rtfm-tq = ["cortex-m-rtfm/timer-queue"]
+#rtfm = ["cortex-m-rtfm"]
+#rtfm-tq = ["cortex-m-rtfm/timer-queue"]
 
 #[dependencies.sample]
 #git = "https://github.com/RustAudio/sample.git"
