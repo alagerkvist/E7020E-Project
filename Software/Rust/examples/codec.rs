@@ -7,7 +7,11 @@ extern crate panic_halt;
 extern crate stm32f4xx_hal as hal;
 use crate::hal::prelude::*;
 use cortex_m::{asm, iprintln};
+use crate::hal::prelude::_stm32f4xx_hal_rcc_RccExt;
 use hal::spi::{Spi, Mode, Phase, Polarity};
+use hal::stm32::i2s2ext;
+    use crate::hal::gpio::GpioExt as _stm32f4xx_hal_gpio_GpioExt;
+
 use rtfm::{app};
 #[app(device = hal::stm32)]
 const APP: () = {

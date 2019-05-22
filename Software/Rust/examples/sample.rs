@@ -7,9 +7,10 @@
 extern crate panic_halt;
 extern crate sample;
 extern crate stm32f4xx_hal as hal;
+use crate::hal::prelude::*;
 use cortex_m::{asm, iprintln};
 use rtfm::{app};
-
+use hal::spi::{Spi, Mode, Phase, Polarity};
 use core::alloc::{Layout, GlobalAlloc};
 use core::ptr::null_mut;
 
@@ -22,7 +23,7 @@ unsafe impl GlobalAlloc for MyAllocator {
 
 #[global_allocator]
 static A: MyAllocator = MyAllocator;
-use sample::{signal, Signal, I24, Sample};
+use sample::{signal, Signal, I24, Sample, conv};
 
 
 #[app(device = hal::stm32)]
@@ -32,11 +33,164 @@ const APP: () = {
     fn init() {
         let stim = &mut core.ITM.stim[0];
         iprintln!(stim, "hello sample, i hope this work");
-        let mut signal = signal::rate(4.0).const_hz(1.0).sine();
-        for _i in 0..4 {
-            let s = signal.next();
-            let t = I24::from_sample(s[0]);
-            iprintln!(stim, "{:?}", t);
+        device.I2S2EXT.dr.write(|w|  w.dr().bits(0x7FFF));
+        device.RCC.cr.modify(|_,w| {
+            w.plli2son().on()
+            .hseon().on()
+        });
+
+        device.RCC.plli2scfgr.modify(|_,w| {
+            unsafe {
+                w.plli2sr().bits(0b100)
+                .plli2sm().bits(0b110)
+                .plli2sn().bits(0b10000010)
+            }
+        });
+        device.RCC.cfgr.modify(|_, w| {
+            w.i2ssrc().plli2s()
+        });
+        device.RCC.apb1enr.modify(|_, w| {
+            w.spi2en().enabled()
+        });
+
+        device.RCC.ahb1enr.modify(|_, w| {
+            w.gpioben().enabled()
+            .gpiocen().enabled()
+        });
+        
+        device.RCC.cfgr.modify(|_, w|  { 
+            w.mco2().sysclk().mco2pre().div4() 
+        });
+
+
+        let rcc = device.RCC.constrain();
+        let clocks = rcc.cfgr.freeze();
+        
+        let gpioa = device.GPIOA.split();
+        let sck = gpioa.pa5.into_alternate_af5();
+        let miso = gpioa.pa6.into_alternate_af5();
+        let mosi = gpioa.pa7.into_alternate_af5();
+        let mut cs = gpioa.pa4.into_push_pull_output();
+
+        pub const MODE: Mode = Mode {
+            polarity: Polarity::IdleHigh,
+            phase: Phase::CaptureOnSecondTransition,
+        };
+        let mut spi = Spi::spi1(
+            device.SPI1,
+            (sck, miso, mosi),
+            MODE,
+            1_000_000.hz(),
+            clocks
+        );
+        device.GPIOC.ospeedr.modify(|_, w| w.ospeedr6().very_high_speed());
+
+        device.GPIOC.moder.modify(|_, w| w.moder9().alternate()); //bits(0b10));
+        device.GPIOC.ospeedr.modify(|_, w| w.ospeedr9().very_high_speed()); // .bits(0b11));
+
+        let gpioc = device.GPIOC.split();
+        let _mclk = gpioc.pc6.into_alternate_af5();
+        let gpiob = device.GPIOB.split();
+        let _lrck = gpiob.pb12.into_alternate_af5();
+        let _slck = gpiob.pb13.into_alternate_af5();
+        let _sdin = gpiob.pb14.into_alternate_af6();
+        let _sdout = gpiob.pb15.into_alternate_af5();
+
+
+        device.I2S2EXT.i2spr.modify(|_, w| {
+            unsafe{
+                w.i2sdiv().bits(0b10)
+            }
+        });
+
+        device.I2S2EXT.i2scfgr.modify(|_, w| {
+            w.i2se().disabled()
+        });
+
+        device.I2S2EXT.i2scfgr.modify(|_, w| {
+            w.i2smod().i2smode()
+            .i2scfg().master_tx()
+            .i2sstd().msb()
+            .datlen().twenty_four_bit()
+            .chlen().thirty_two_bit()
+            .ckpol().idle_high()
+        });
+
+        device.I2S2EXT.i2scfgr.modify(|_, w| {
+            w.i2se().enabled()
+        });
+        
+        device.SPI2.i2scfgr.modify(|_, w| {
+            w.i2se().disabled()
+        });
+
+        device.SPI2.i2scfgr.modify(|_, w| {
+            w.i2smod().i2smode()
+            .i2scfg().master_rx()
+            .i2sstd().msb()
+            .datlen().twenty_four_bit()
+            .chlen().thirty_two_bit()
+            .ckpol().idle_high()
+        });
+
+        device.SPI2.i2spr.modify(|_, w|{
+            unsafe{
+                w.mckoe().enabled()
+                .i2sdiv().bits(0b10)
+            }
+        });
+        device.SPI2.i2scfgr.modify(|_, w| {
+            w.i2se().enabled()
+        });
+
+        cs.set_high();
+        cs.set_low();
+        cs.set_high();
+
+
+        cs.set_low();
+        let mut something = [0x9E, 0x04, 0x09];
+        let  data = spi.transfer(&mut something);
+        match data {
+                Ok(v) => iprintln!(stim, "working with version: {:?}", v),
+                Err(e) => iprintln!(stim, "error parsing header: {:?}", e),
+        }
+        cs.set_high();
+
+        cs.set_low();
+        let mut something = [0x9E, 0x06, 0x00];
+        let  data = spi.transfer(&mut something);
+        match data {
+                Ok(v) => iprintln!(stim, "working with version: {:?}", v),
+                Err(e) => iprintln!(stim, "error parsing header: {:?}", e),
+        }
+        cs.set_high();
+
+        cs.set_low();
+        let mut something = [0x9F, 0x04];
+        let  data = spi.transfer(&mut something);
+        match data {
+                Ok(v) => iprintln!(stim, "working with version: {:?}", v),
+                Err(e) => iprintln!(stim, "error parsing header: {:?}", e),
+        }
+        cs.set_high();
+
+        let mut signal = signal::rate(33100.0).const_hz(440.0).sine();
+        for _i in 0..1000 {
+            let sample = signal.next();
+            let i24_sample = I24::from_sample(sample[0]);
+            let i32_sample = conv::i24::to_i32(i24_sample);
+            let low = ((i32_sample & 0xFF) << 8) as u16;
+            let high = ((i32_sample & 0xFFFF00) >> 8) as u16;
+            while !device.I2S2EXT.sr.read().txe().bit_is_set() {}
+            device.I2S2EXT.dr.write(|w| w.dr().bits(high));
+            while !device.I2S2EXT.sr.read().txe().bit_is_set() {}
+            device.I2S2EXT.dr.write(|w| w.dr().bits(low));
+            /*
+            for _ in 0..1000 {
+                cortex_m::asm::nop(); // no operation (cannot be optimized out)
+            }
+            */
         }
     }
 
