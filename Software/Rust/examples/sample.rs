@@ -1,22 +1,16 @@
-//! Prints "Hello, world!" on the host console using semihosting
-
+//Uses a local compiled sample (https://github.com/RustAudio/sample) with libm (https://github.com/rust-lang-nursery/libm)
+//Not tested on a MCU yet, but does compile
 #![no_main]
 #![no_std]
 #![feature(alloc_error_handler)]
-#![feature(core_intrinsics)]
 
 extern crate panic_halt;
 extern crate sample;
-extern crate libm;
-use libm::F32Ext;
-use libm::sin;
 use cortex_m_rt::entry;
 use cortex_m_semihosting::hprintln;
 
 use core::alloc::{Layout, GlobalAlloc};//System;
 use core::ptr::null_mut;
-
-use core::intrinsics::sinf64;
 use cortex_m::asm;
 
 
