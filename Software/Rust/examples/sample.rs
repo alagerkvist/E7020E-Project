@@ -31,7 +31,7 @@ const APP: () = {
     #[init]
     fn init() {
         let stim = &mut core.ITM.stim[0];
-        iprintln!(stim, "hello codec");
+        iprintln!(stim, "hello sample, i hope this work");
         let mut signal = signal::rate(4.0).const_hz(1.0).sine();
         for _i in 0..4 {
             let s = signal.next();
