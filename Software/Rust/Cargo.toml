@@ -24,7 +24,7 @@ heapless = "0.4.1"
 
 [dependencies.cortex-m-rtfm]
 version = "0.4.0"
-features = ["timer-queue"]
+optional = true
 
 [dependencies.cortex-m]
 version = "0.5.8"
@@ -35,19 +35,32 @@ version = "0.5.8"
 
 [dependencies.stm32f4]
 version = "0.6.0"
-features = ["stm32f411", "rt"]
+features = ["stm32f413", "rt"]
 optional = true
 
 [dependencies.stm32f4xx-hal]
 git = "https://github.com/stm32-rs/stm32f4xx-hal.git"
-version = "0.3.0"
-features = ["stm32f411", "rt"]
+version = "0.5.0"
+features = ["stm32f413", "rt"]
+optional = true
 
 [features]
 pac = ["stm32f4"]
-#hal = ["stm32f4xx-hal"]
-#rtfm = ["cortex-m-rtfm"]
-#rtfm-tq = ["cortex-m-rtfm/timer-queue"]
+hal = ["stm32f4xx-hal"]
+rtfm = ["cortex-m-rtfm"]
+rtfm-tq = ["cortex-m-rtfm/timer-queue"]
+
+#[dependencies.sample]
+#git = "https://github.com/RustAudio/sample.git"
+#features = []
+#default-features = false
+
+[dependencies.sample]
+path = "/home/deggo/Rust/sample"
+default-features = false
+
+[dependencies.libm]
+git = "https://github.com/rust-lang-nursery/libm.git"
 
 # this lets you use `cargo fix`!
 [[bin]]
@@ -60,3 +73,5 @@ incremental = false # disable incremental build to allow lto on nightly
 codegen-units = 1   # better optimizations
 debug = true        # symbols are nice and they don't increase the size on Flash
 lto = true          # better optimizations
+
+

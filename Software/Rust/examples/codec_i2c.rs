@@ -22,8 +22,8 @@ const APP: () = {
         let clocks = rcc.cfgr.freeze();
 
         let gpioa = device.GPIOA.split();
-        let mut cs = gpioa.pa4.into_push_pull_output();
-        let mut mosi = gpioa.pa7.into_push_pull_output();
+        let _cs = gpioa.pa4.into_push_pull_output();
+        let _mosi = gpioa.pa7.into_push_pull_output();
         // mosi.set_high();
         // cs.set_high();
         let gpiob = device.GPIOB.split();
