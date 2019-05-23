@@ -8,6 +8,8 @@ extern crate panic_halt;
 extern crate sample;
 extern crate stm32f4xx_hal as hal;
 use crate::hal::prelude::*;
+use core::f64::consts::PI;
+use libm::sin;
 use cortex_m::{asm, iprintln};
 use rtfm::{app};
 use hal::spi::{Spi, Mode, Phase, Polarity};
@@ -44,6 +46,7 @@ const APP: () = {
                 w.plli2sr().bits(0b100)
                 .plli2sm().bits(0b110)
                 .plli2sn().bits(0b10000010)
+                
             }
         });
         device.RCC.cfgr.modify(|_, w| {
@@ -96,13 +99,6 @@ const APP: () = {
         let _sdin = gpiob.pb14.into_alternate_af6();
         let _sdout = gpiob.pb15.into_alternate_af5();
 
-
-        device.I2S2EXT.i2spr.modify(|_, w| {
-            unsafe{
-                w.i2sdiv().bits(0b10)
-            }
-        });
-
         device.I2S2EXT.i2scfgr.modify(|_, w| {
             w.i2se().disabled()
         });
@@ -116,6 +112,12 @@ const APP: () = {
             .ckpol().idle_high()
         });
 
+        device.I2S2EXT.i2spr.modify(|_, w|{
+            unsafe{
+                w.mckoe().enabled()
+                .i2sdiv().bits(0b10)
+            }
+        });
         device.I2S2EXT.i2scfgr.modify(|_, w| {
             w.i2se().enabled()
         });
@@ -126,7 +128,7 @@ const APP: () = {
 
         device.SPI2.i2scfgr.modify(|_, w| {
             w.i2smod().i2smode()
-            .i2scfg().master_rx()
+            .i2scfg().master_tx()
             .i2sstd().msb()
             .datlen().twenty_four_bit()
             .chlen().thirty_two_bit()
@@ -149,6 +151,7 @@ const APP: () = {
 
 
         cs.set_low();
+        //0x29 loopback
         let mut something = [0x9E, 0x04, 0x09];
         let  data = spi.transfer(&mut something);
         match data {
@@ -166,6 +169,7 @@ const APP: () = {
         }
         cs.set_high();
 
+        
         cs.set_low();
         let mut something = [0x9F, 0x04];
         let  data = spi.transfer(&mut something);
@@ -175,22 +179,45 @@ const APP: () = {
         }
         cs.set_high();
 
+
         let mut signal = signal::rate(33100.0).const_hz(440.0).sine();
-        for _i in 0..1000 {
+        /*
+        for _i in 0..33100 {
             let sample = signal.next();
+            let u16_sample = u32::from_sample(sample[0]);
             let i24_sample = I24::from_sample(sample[0]);
-            let i32_sample = conv::i24::to_i32(i24_sample);
-            let low = ((i32_sample & 0xFF) << 8) as u16;
-            let high = ((i32_sample & 0xFFFF00) >> 8) as u16;
+            let i32_sample = i24_sample.inner();//conv::i24::to_i32(i24_sample);
+            //let low = (( (i32_sample as u32) & 0xFF00) >> 8) as u16;
+            //let high = (( (i32_sample as u32) & (0xFFFF0000 as u32)) >> 16) as u16;
+            let low = u16_sample as u16;
+            let high = (u16_sample & 0xFFFF0000 << 16) as u16; 
             while !device.I2S2EXT.sr.read().txe().bit_is_set() {}
-            device.I2S2EXT.dr.write(|w| w.dr().bits(high));
+            device.I2S2EXT.dr.write(|w| w.dr().bits(0xFF));
             while !device.I2S2EXT.sr.read().txe().bit_is_set() {}
-            device.I2S2EXT.dr.write(|w| w.dr().bits(low));
+            device.I2S2EXT.dr.write(|w| w.dr().bits(0xF0));
+            
+            
+            //iprintln!(stim, "Org: {:?}\ni32: {:b}\nHigh: {:?}\nLow: {:?}", i24_sample, i32_sample, high, low);
             /*
             for _ in 0..1000 {
                 cortex_m::asm::nop(); // no operation (cannot be optimized out)
             }
             */
+        }
+        */
+        for i in 0..10 {
+        for i in 1..33101{//33101{
+            let sin = 8388607.0 * sin(2.0 * PI * 440.0 * (i as f64) / 33100.0);
+            let rounded = sin as i32;
+            //iprintln!(stim, "{:?} {:x}", sin, rounded);
+            let high = (((rounded as u32) >> 16) & 0xFFFF) as u16;
+            let low = ((rounded as u32) & 0xFF00) as u16;
+            while !device.SPI2.sr.read().txe().bit_is_set() {}
+            device.SPI2.dr.write(|w| unsafe { w.bits(rounded as u32) });
+            //while !device.SPI2.sr.read().txe().bit_is_set() {}
+            //device.SPI2.dr.write(|w| w.dr().bits(low));
+            //iprintln!(stim, "{:x} {:x}", high, low);
+        }
         }
     }
 
